@@ -27,7 +27,7 @@
     <url>http://code.google.com/p/smiparser/issues/list</url>
   </issueManagement>
   <properties>
-	<smiparser.version>0.6</smiparser.version>
+	<smiparser.version>0.6.1</smiparser.version>
   </properties>
   <distributionManagement>
     <site>

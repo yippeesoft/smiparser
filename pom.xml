@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jsmiparser</groupId>
 	<artifactId>jsmiparser</artifactId>
 	<packaging>pom</packaging>
-	<version>0.6.4-SNAPSHOT</version>
+	<version>0.6.4</version>
 	<name>Java SMI Parser</name>
 	<url>http://www.jsmiparser.org</url>
 	<inceptionYear>2011</inceptionYear>
@@ -20,9 +19,9 @@
 		<module>jsmiparser-api</module>
 	</modules>
 	<scm>
-		<connection>scm:svn:http://smiparser.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://smiparser.googlecode.com/svn/trunk/</developerConnection>
-		<url>http://smiparser.googlecode.com/svn/trunk/</url>
+		<connection>scm:svn:http://smiparser.googlecode.com/svn/tags/jsmiparser-0.6.4</connection>
+		<developerConnection>scm:svn:https://smiparser.googlecode.com/svn/tags/jsmiparser-0.6.4</developerConnection>
+		<url>http://smiparser.googlecode.com/svn/tags/jsmiparser-0.6.4</url>
 	</scm>
 	<issueManagement>
 		<url>http://code.google.com/p/smiparser/issues/list</url>

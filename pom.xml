@@ -30,7 +30,67 @@
 	<properties>
 		<smiparser.version>0.6.1</smiparser.version>
 		<createChecksum>true</createChecksum>
+		<commons-beanutils.version>1.8.3</commons-beanutils.version>
+		<commons-collections.version>3.2.1</commons-collections.version>
+		<log4j.version>1.2.16</log4j.version>
+		<junit.version>3.8.2</junit.version>
+		<spring-core.version>3.0.5.RELEASE</spring-core.version>
+		<spring-context.version>3.0.5.RELEASE</spring-context.version>
+		<spring-beans.version>3.0.5.RELEASE</spring-beans.version>
+		<spring-test.version>3.0.5.RELEASE</spring-test.version>
+		<antlr.version>2.7.6</antlr.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>${commons-collections.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>antlr</groupId>
+				<artifactId>antlr</artifactId>
+				<version>${antlr.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-context.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring-beans.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring-test.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<distributionManagement>
 		<repository>
@@ -40,6 +100,21 @@
 		</repository>
 	</distributionManagement>
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.1</version>
+					<configuration>
+						<useReleaseProfile>false</useReleaseProfile>
+						<preparationGoals>clean install</preparationGoals>
+						<goals>deploy</goals>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

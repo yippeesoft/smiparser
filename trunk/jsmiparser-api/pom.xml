@@ -2,13 +2,13 @@
 	<parent>
 		<groupId>org.jsmiparser</groupId>
 		<artifactId>jsmiparser</artifactId>
-		<version>0.6.2</version>
+		<version>0.6.3-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jsmiparser</groupId>
 	<artifactId>jsmiparser-api</artifactId>
 	<packaging>jar</packaging>
-	<version>0.6.2</version>
+	<version>0.6.3-SNAPSHOT</version>
 	<name>Java SMI Parser API</name>
 	<dependencies>
 		<dependency>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jsmiparser</groupId>
 	<artifactId>jsmiparser</artifactId>
@@ -27,7 +28,6 @@
 		<url>http://code.google.com/p/smiparser/issues/list</url>
 	</issueManagement>
 	<properties>
-		<smiparser.version>0.6.1</smiparser.version>
 		<createChecksum>true</createChecksum>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
@@ -39,7 +39,6 @@
 		<spring-test.version>3.0.5.RELEASE</spring-test.version>
 		<antlr.version>2.7.6</antlr.version>
 	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -106,9 +105,10 @@
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.1</version>
 					<configuration>
-						<useReleaseProfile>false</useReleaseProfile>
+						<useReleaseProfile>true</useReleaseProfile>
 						<preparationGoals>clean install</preparationGoals>
 						<goals>deploy</goals>
+						<arguments>-Prelease,deploy</arguments>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 					</configuration>
 				</plugin>

@@ -15,17 +15,20 @@
  */
 package org.jsmiparser.smi;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class UtilTest extends TestCase {
-    public void testStripLastOidPart() {
-        String colOid = "1.2.3";
+import org.junit.Test;
 
-        String rowOid = SmiUtil.stripLastOidPart(colOid);
-        assertEquals("1.2", rowOid);
+public class UtilTest {
+	@Test
+	public void testStripLastOidPart() {
+		String colOid = "1.2.3";
 
-        String tableOid = SmiUtil.stripLastOidPart(rowOid);
-        assertEquals("1", tableOid);
-    }
+		String rowOid = SmiUtil.stripLastOidPart(colOid);
+		assertEquals("1.2", rowOid);
+
+		String tableOid = SmiUtil.stripLastOidPart(rowOid);
+		assertEquals("1", tableOid);
+	}
 
 }

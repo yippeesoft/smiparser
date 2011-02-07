@@ -15,19 +15,21 @@
  */
 package org.jsmiparser.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class TextUtilTest extends TestCase {
+import org.junit.Before;
+import org.junit.Test;
 
-    public void testKeyWordMap() {
-        assertEquals(53, TextUtil.keyWordMap_.size());
-    }
+public class TextUtilTest {
+	@Before
+	public void testKeyWordMap() {
+		assertEquals(53, TextUtil.keyWordMap_.size());
+	}
+	@Test
+	public void testDeleteChar() {
+		assertEquals("", TextUtil.deleteChar("aa", 'a'));
+		assertEquals("aa", TextUtil.deleteChar("aa", 'b'));
+		assertEquals("IFMIB", TextUtil.deleteChar("IF-MIB", '-'));
 
-    public void testDeleteChar() {
-
-        assertEquals("", TextUtil.deleteChar("aa", 'a'));
-        assertEquals("aa", TextUtil.deleteChar("aa", 'b'));
-        assertEquals("IFMIB", TextUtil.deleteChar("IF-MIB", '-'));
-
-    }
+	}
 }

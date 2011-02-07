@@ -15,6 +15,23 @@
  */
 package org.jsmiparser.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.jsmiparser.AbstractMibTestCase;
 import org.jsmiparser.smi.SmiConstants;
 import org.jsmiparser.smi.SmiIndex;
@@ -35,355 +52,390 @@ import org.jsmiparser.smi.SmiVarBindField;
 import org.jsmiparser.smi.SmiVariable;
 import org.jsmiparser.util.token.HexStringToken;
 import org.jsmiparser.util.url.FileURLListFactory;
-
-import java.io.File;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.junit.Test;
 
 public class SmiDefaultParserTest extends AbstractMibTestCase {
 
-    public SmiDefaultParserTest() {
-        super(null);
-    }
+	public SmiDefaultParserTest() {
+		super(null);
+	}
 
-    @Override
-    protected SmiDefaultParser createParser() throws Exception {
-        URL mibsURL = getClass().getClassLoader().getResource("libsmi-0.4.5/mibs");
-        File mibsDir = new File(mibsURL.toURI());
+	@Override
+	protected SmiDefaultParser createParser() throws Exception {
+		URL mibsURL = getClass().getClassLoader().getResource(
+				"libsmi-0.4.5/mibs");
+		File mibsDir = new File(mibsURL.toURI());
 
-        SmiDefaultParser parser = new SmiDefaultParser();
-        List<URL> inputUrls = initFileParserOptions(mibsDir, "iana", "ietf", "site", "tubs");
-        parser.getFileParserPhase().setInputUrls(inputUrls);
-        return parser;
-    }
+		SmiDefaultParser parser = new SmiDefaultParser();
+		List<URL> inputUrls = initFileParserOptions(mibsDir, "iana", "ietf",
+				"site", "tubs");
+		parser.getFileParserPhase().setInputUrls(inputUrls);
+		return parser;
+	}
 
-    public void testLibSmi() throws URISyntaxException {
-        SmiMib mib = getMib();
-        assertNotNull(mib);
-        //showOverview(mib);
+	@Test
+	public void testLibSmi() throws URISyntaxException {
+		SmiMib mib = getMib();
+		assertNotNull(mib);
+		// showOverview(mib);
 
-        // fails because of mixing of different smi versions
-        checkOidTree(mib);
+		// fails because of mixing of different smi versions
+		checkOidTree(mib);
 
-        //XStream xStream = new XStream();
-        //xStream.toXML(mib, System.out);
+		// XStream xStream = new XStream();
+		// xStream.toXML(mib, System.out);
 
-        assertEquals(255, mib.getModules().size());
-        assertEquals(1888, mib.getTypes().size());
-        assertEquals(559, mib.getTextualConventions().size());
-        assertEquals(1265, mib.getTables().size());
-        assertEquals(1265, mib.getRows().size());
-        assertEquals(12590, mib.getVariables().size());
-        assertEquals(1465, mib.getScalars().size());
-        assertEquals(11125, mib.getColumns().size());
-        assertEquals(mib.getVariables().size(), mib.getScalars().size() + mib.getColumns().size());
-        assertEquals(18938, mib.getOidValues().size());
-        assertEquals(mib.getTables().size() + mib.getRows().size() + mib.getVariables().size(), mib.getObjectTypes().size());
+		assertEquals(255, mib.getModules().size());
+		assertEquals(1888, mib.getTypes().size());
+		assertEquals(559, mib.getTextualConventions().size());
+		assertEquals(1265, mib.getTables().size());
+		assertEquals(1265, mib.getRows().size());
+		assertEquals(12590, mib.getVariables().size());
+		assertEquals(1465, mib.getScalars().size());
+		assertEquals(11125, mib.getColumns().size());
+		assertEquals(mib.getVariables().size(), mib.getScalars().size()
+				+ mib.getColumns().size());
+		assertEquals(18938, mib.getOidValues().size());
+		assertEquals(mib.getTables().size() + mib.getRows().size()
+				+ mib.getVariables().size(), mib.getObjectTypes().size());
 
-        checkObjectTypeAccessAll(mib);
-    }
+		checkObjectTypeAccessAll(mib);
+	}
 
-    public void testNoCycleInStandards() {
-        SmiModule rfc1155Smi = getMib().findModule("RFC1155-SMI");
-        assertNotNull(rfc1155Smi);
-        assertEquals(0, rfc1155Smi.getImports().size());
+	@Test
+	public void testNoCycleInStandards() {
+		SmiModule rfc1155Smi = getMib().findModule("RFC1155-SMI");
+		assertNotNull(rfc1155Smi);
+		assertEquals(0, rfc1155Smi.getImports().size());
 
-        SmiModule rfc1212 = getMib().findModule("RFC-1212");
-        assertNotNull(rfc1212);
-        assertEquals(1, rfc1212.getImports().size()); // debatable: it seems the original does have a DisplayString import
-    }
+		SmiModule rfc1212 = getMib().findModule("RFC-1212");
+		assertNotNull(rfc1212);
+		assertEquals(1, rfc1212.getImports().size()); // debatable: it seems the
+														// original does have a
+														// DisplayString import
+	}
 
+	@Test
+	public void testBitsDefVal() {
+		SmiVariable var = getMib().getColumns().find("acctngSelectionType");
+		assertNotNull(var);
+		assertEquals(SmiPrimitiveType.BITS, var.getPrimitiveType());
 
-    public void testBitsDefVal() {
-        SmiVariable var = getMib().getColumns().find("acctngSelectionType");
-        assertNotNull(var);
-        assertEquals(SmiPrimitiveType.BITS, var.getPrimitiveType());
+		List<SmiNamedNumber> defaultValue = var.getDefaultValue()
+				.getBitsValue();
+		assertEquals(4, defaultValue.size());
+		for (SmiNamedNumber nn : defaultValue) {
+			assertNotNull(nn);
+		}
+	}
 
-        List<SmiNamedNumber> defaultValue = var.getDefaultValue().getBitsValue();
-        assertEquals(4, defaultValue.size());
-        for (SmiNamedNumber nn : defaultValue) {
-            assertNotNull(nn);
-        }
-    }
+	@Test
+	public void testDefaultValueOid() {
+		SmiMib mib = getMib();
 
-    public void testDefaultValueOid() {
-        SmiMib mib = getMib();
+		SmiOidValue zeroDotZero = mib.getOidValues().find("zeroDotZero");
+		assertNotNull(zeroDotZero);
+		assertEquals(mib.getRootNode(), zeroDotZero.getNode().getParent()
+				.getParent());
+		assertEquals(2, zeroDotZero.getOid().length);
+		assertEquals(0, zeroDotZero.getOid()[0]);
+		assertEquals(0, zeroDotZero.getOid()[1]);
 
-        SmiOidValue zeroDotZero = mib.getOidValues().find("zeroDotZero");
-        assertNotNull(zeroDotZero);
-        assertEquals(mib.getRootNode(), zeroDotZero.getNode().getParent().getParent());
-        assertEquals(2, zeroDotZero.getOid().length);
-        assertEquals(0, zeroDotZero.getOid()[0]);
-        assertEquals(0, zeroDotZero.getOid()[1]);
+		SmiVariable mioxPeerX25CallParamId = mib.getVariables().find(
+				"mioxPeerX25CallParamId");
+		assertNotNull(mioxPeerX25CallParamId);
+		assertNotNull(mioxPeerX25CallParamId.getDefaultValue());
+		assertNotNull(mioxPeerX25CallParamId.getDefaultValue().getOidNode());
+		assertSame(zeroDotZero.getNode(), mioxPeerX25CallParamId
+				.getDefaultValue().getOidNode());
+	}
 
-        SmiVariable mioxPeerX25CallParamId = mib.getVariables().find("mioxPeerX25CallParamId");
-        assertNotNull(mioxPeerX25CallParamId);
-        assertNotNull(mioxPeerX25CallParamId.getDefaultValue());
-        assertNotNull(mioxPeerX25CallParamId.getDefaultValue().getOidNode());
-        assertSame(zeroDotZero.getNode(), mioxPeerX25CallParamId.getDefaultValue().getOidNode());
-    }
+	@Test
+	public void testIntegerHexStringRange() {
+		SmiMib mib = getMib();
+		SmiTextualConvention refreshIntervalTC = mib.getTextualConventions()
+				.find("RefreshInterval");
+		assertNotNull(refreshIntervalTC);
 
-    public void testIntegerHexStringRange() {
-        SmiMib mib = getMib();
-        SmiTextualConvention refreshIntervalTC = mib.getTextualConventions().find("RefreshInterval");
-        assertNotNull(refreshIntervalTC);
+		assertEquals(1, refreshIntervalTC.getRangeConstraints().size());
+		SmiRange range = refreshIntervalTC.getRangeConstraints().get(0);
+		assertEquals(new BigInteger("0"), range.getMinValue());
 
-        assertEquals(1, refreshIntervalTC.getRangeConstraints().size());
-        SmiRange range = refreshIntervalTC.getRangeConstraints().get(0);
-        assertEquals(new BigInteger("0"), range.getMinValue());
+		assertNotNull(range.getEndToken());
+		assertTrue(range.getEndToken() instanceof HexStringToken);
+		assertEquals(new BigInteger("7FFFFFFF", 16), range.getMaxValue());
+	}
 
-        assertNotNull(range.getEndToken());
-        assertTrue(range.getEndToken() instanceof HexStringToken);
-        assertEquals(new BigInteger("7FFFFFFF", 16), range.getMaxValue());
-    }
+	@Test
+	// NetworkAddress is a very special type in SMIv1, which is a CHOICE with
+	// only one choice: IpAddress
+	public void testNetworkAddressChoice() {
+		SmiMib mib = getMib();
+		SmiType ipAddress = mib.getTypes().find("RFC1155-SMI", "IpAddress");
+		assertNotNull(ipAddress);
 
-    // NetworkAddress is a very special type in SMIv1, which is a CHOICE with only one choice: IpAddress
-    public void testNetworkAddressChoice() {
-        SmiMib mib = getMib();
-        SmiType ipAddress = mib.getTypes().find("RFC1155-SMI", "IpAddress");
-        assertNotNull(ipAddress);
+		SmiType networkAddress = mib.getTypes().find("RFC1155-SMI",
+				"NetworkAddress");
+		assertNotNull(networkAddress);
+		assertEquals(SmiType.class, networkAddress.getClass());
+		assertSame(ipAddress, networkAddress.getBaseType());
 
-        SmiType networkAddress = mib.getTypes().find("RFC1155-SMI", "NetworkAddress");
-        assertNotNull(networkAddress);
-        assertEquals(SmiType.class, networkAddress.getClass());
-        assertSame(ipAddress, networkAddress.getBaseType());
+		SmiVariable atNetAddress = mib.getVariables().find("RFC1213-MIB",
+				"atNetAddress");
+		assertNotNull(atNetAddress);
+		assertSame(networkAddress, atNetAddress.getType());
+		assertEquals(SmiPrimitiveType.IP_ADDRESS,
+				atNetAddress.getPrimitiveType());
+	}
 
-        SmiVariable atNetAddress = mib.getVariables().find("RFC1213-MIB", "atNetAddress");
-        assertNotNull(atNetAddress);
-        assertSame(networkAddress, atNetAddress.getType());
-        assertEquals(SmiPrimitiveType.IP_ADDRESS, atNetAddress.getPrimitiveType());
-    }
+	@Test
+	public void testTypes() {
+		for (SmiType type : getMib().getTypes()) {
+			assertFalse(type instanceof SmiReferencedType);
+			if (!(type instanceof SmiProtocolType) && type.getFields() == null) {
+				assertNotNull(type.getId(), type.getPrimitiveType());
+			}
+			checkType(type);
+		}
 
-    public void testTypes() {
-        for (SmiType type : getMib().getTypes()) {
-            assertFalse(type instanceof SmiReferencedType);
-            if (!(type instanceof SmiProtocolType) && type.getFields() == null) {
-                assertNotNull(type.getId(), type.getPrimitiveType());
-            }
-            checkType(type);
-        }
+		for (SmiVariable variable : getMib().getVariables()) {
+			assertNotNull(variable.getId(), variable.getType());
+			assertFalse(variable.getId(),
+					variable.getType() instanceof SmiReferencedType);
+			assertFalse(variable.getId(),
+					variable.getType() instanceof SmiProtocolType);
+			assertNotNull(variable.getId(), variable.getType()
+					.getPrimitiveType());
+			checkType(variable.getType());
+		}
+	}
 
-        for (SmiVariable variable : getMib().getVariables()) {
-            assertNotNull(variable.getId(), variable.getType());
-            assertFalse(variable.getId(), variable.getType() instanceof SmiReferencedType);
-            assertFalse(variable.getId(), variable.getType() instanceof SmiProtocolType);
-            assertNotNull(variable.getId(), variable.getType().getPrimitiveType());
-            checkType(variable.getType());
-        }
-    }
+	private void checkType(SmiType type) {
+		if (type.getBaseType() != null) {
+			checkType(type.getBaseType());
+		} else if (type.getFields() == null
+				&& !(type instanceof SmiProtocolType)) {
+			assertTrue(type.getId(), type == SmiConstants.BITS_TYPE
+					|| type == SmiConstants.INTEGER_TYPE
+					|| type == SmiConstants.OBJECT_IDENTIFIER_TYPE
+					|| type == SmiConstants.OCTET_STRING_TYPE);
+		}
+	}
 
-    private void checkType(SmiType type) {
-        if (type.getBaseType() != null) {
-            checkType(type.getBaseType());
-        } else if (type.getFields() == null && !(type instanceof SmiProtocolType)) {
-            assertTrue(type.getId(),
-                    type == SmiConstants.BITS_TYPE
-                            || type == SmiConstants.INTEGER_TYPE
-                            || type == SmiConstants.OBJECT_IDENTIFIER_TYPE
-                            || type == SmiConstants.OCTET_STRING_TYPE);
-        }
-    }
+	@Test
+	public void testIpNetToMediaNetAddress() {
+		SmiVariable var = getMib().getVariables().find("IP-MIB",
+				"ipNetToMediaNetAddress");
+		assertNotNull(var);
+		assertEquals(SmiPrimitiveType.IP_ADDRESS, var.getPrimitiveType());
+	}
 
-    public void testIpNetToMediaNetAddress() {
-        SmiVariable var = getMib().getVariables().find("IP-MIB", "ipNetToMediaNetAddress");
-        assertNotNull(var);
-        assertEquals(SmiPrimitiveType.IP_ADDRESS, var.getPrimitiveType());
-    }
+	@Test
+	public void testAtmAcctngRecordCrc16() {
+		SmiVariable var = getMib().getVariables().find("atmAcctngRecordCrc16");
+		assertNotNull(var);
+		assertEquals(SmiPrimitiveType.OCTET_STRING, var.getPrimitiveType());
+		assertNotNull(var.getSizeConstraints());
 
-    public void testAtmAcctngRecordCrc16() {
-        SmiVariable var = getMib().getVariables().find("atmAcctngRecordCrc16");
-        assertNotNull(var);
-        assertEquals(SmiPrimitiveType.OCTET_STRING, var.getPrimitiveType());
-        assertNotNull(var.getSizeConstraints());
+	}
 
+	@Test
+	public void testFindMethods() {
+		SmiMib mib = getMib();
+		List<SmiSymbol> pingMibs = mib.getSymbols().findAll("pingMIB");
+		assertEquals(2, pingMibs.size());
 
-    }
+		try {
+			mib.getSymbols().find("pingMIB");
+			fail();
+		} catch (IllegalArgumentException expected) {
+			// do nothing comment to shut up IntelliJ
+		}
 
-    public void testFindMethods() {
-        SmiMib mib = getMib();
-        List<SmiSymbol> pingMibs = mib.getSymbols().findAll("pingMIB");
-        assertEquals(2, pingMibs.size());
+		try {
+			mib.getSymbols().find(null, "pingMIB");
+			fail();
+		} catch (IllegalArgumentException expected) {
+			// do nothing comment to shut up IntelliJ
+		}
 
-        try {
-            mib.getSymbols().find("pingMIB");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            // do nothing comment to shut up IntelliJ
-        }
+		try {
+			mib.getSymbols().find("IF-MIBBBBB", "pingMIB");
+			fail();
+		} catch (IllegalArgumentException e) {
+			// do nothing
+		}
 
-        try {
-            mib.getSymbols().find(null, "pingMIB");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            // do nothing comment to shut up IntelliJ
-        }
+		assertNull(mib.getSymbols().find("IF-MIB", "pingMIB"));
 
-        try {
-            mib.getSymbols().find("IF-MIBBBBB", "pingMIB");
-            fail();
-        } catch (IllegalArgumentException e) {
-            // do nothing
-        }
+		SmiOidValue dismanPingMIB = mib.getOidValues().find("DISMAN-PING-MIB",
+				"pingMIB");
+		assertNotNull(dismanPingMIB);
+		assertEquals("DISMAN-PING-MIB", dismanPingMIB.getModule().getId());
+		assertEquals(80, dismanPingMIB.getLastOidComponent().getValueToken()
+				.getValue());
 
-        assertNull(mib.getSymbols().find("IF-MIB", "pingMIB"));
+		SmiOidValue tubsIbrPingMIB = mib.getOidValues().find(
+				"TUBS-IBR-PING-MIB", "pingMIB");
+		assertNotNull(tubsIbrPingMIB);
+		assertEquals("TUBS-IBR-PING-MIB", tubsIbrPingMIB.getModule().getId());
+		assertEquals(8, tubsIbrPingMIB.getLastOidComponent().getValueToken()
+				.getValue());
+	}
 
-        SmiOidValue dismanPingMIB = mib.getOidValues().find("DISMAN-PING-MIB", "pingMIB");
-        assertNotNull(dismanPingMIB);
-        assertEquals("DISMAN-PING-MIB", dismanPingMIB.getModule().getId());
-        assertEquals(80, dismanPingMIB.getLastOidComponent().getValueToken().getValue());
+	@Test
+	public void testUnits() {
+		SmiModule ipModule = getMib().findModule("IP-MIB");
+		SmiVariable ipReasmTimeout = ipModule.findVariable("ipReasmTimeout");
+		assertNotNull(ipReasmTimeout);
+		assertNotNull(ipReasmTimeout.getUnitsToken());
+		assertEquals("seconds", ipReasmTimeout.getUnits());
+	}
 
-        SmiOidValue tubsIbrPingMIB = mib.getOidValues().find("TUBS-IBR-PING-MIB", "pingMIB");
-        assertNotNull(tubsIbrPingMIB);
-        assertEquals("TUBS-IBR-PING-MIB", tubsIbrPingMIB.getModule().getId());
-        assertEquals(8, tubsIbrPingMIB.getLastOidComponent().getValueToken().getValue());
-    }
+	@Test
+	public void testIfMib() {
+		SmiMib mib = getMib();
+		SmiModule ifModule = mib.findModule("IF-MIB");
+		assertNotNull(ifModule);
 
-    public void testUnits() {
-        SmiModule ipModule = getMib().findModule("IP-MIB");
-        SmiVariable ipReasmTimeout = ipModule.findVariable("ipReasmTimeout");
-        assertNotNull(ipReasmTimeout);
-        assertNotNull(ipReasmTimeout.getUnitsToken());
-        assertEquals("seconds", ipReasmTimeout.getUnits());
-    }
+		SmiType interfaceIndex = ifModule.findType("InterfaceIndex");
+		assertNotNull(interfaceIndex);
+		Collection<SmiType> interfaceIndexes = mib.getTypes().findAll(
+				"InterfaceIndex");
+		assertEquals(3, interfaceIndexes.size());
+		assertTrue(interfaceIndexes.contains(interfaceIndex));
+		assertEquals("InterfaceIndex", interfaceIndex.getId());
+		assertEquals("IF-MIB", interfaceIndex.getModule().getId());
+		String source = interfaceIndex.getModule().getIdToken().getLocation()
+				.getSource();
+		assertTrue(source.contains("IF-MIB"));
+		assertEquals(SmiTextualConvention.class, interfaceIndex.getClass());
+		assertNotNull(interfaceIndex.getRangeConstraints());
+		assertEquals(1, interfaceIndex.getRangeConstraints().size());
+		assertEquals(SmiVarBindField.INTEGER_VALUE,
+				interfaceIndex.getVarBindField());
 
+		SmiTable ifTable = ifModule.findTable("ifTable");
+		assertNotNull(ifTable);
+		assertEquals("1.3.6.1.2.1.2.2", ifTable.getOidStr());
+		Collection<SmiTable> ifTables = mib.getTables().findAll("ifTable");
+		assertEquals(2, ifTables.size());
+		assertTrue(ifTables.contains(ifTable));
 
-    public void testIfMib() {
-        SmiMib mib = getMib();
-        SmiModule ifModule = mib.findModule("IF-MIB");
-        assertNotNull(ifModule);
+		SmiRow ifEntry = ifModule.findRow("ifEntry");
+		assertNotNull(ifEntry);
+		assertEquals("1.3.6.1.2.1.2.2.1", ifEntry.getOidStr());
+		assertSame(ifEntry.getTable(), ifTable);
 
-        SmiType interfaceIndex = ifModule.findType("InterfaceIndex");
-        assertNotNull(interfaceIndex);
-        Collection<SmiType> interfaceIndexes = mib.getTypes().findAll("InterfaceIndex");
-        assertEquals(3, interfaceIndexes.size());
-        assertTrue(interfaceIndexes.contains(interfaceIndex));
-        assertEquals("InterfaceIndex", interfaceIndex.getId());
-        assertEquals("IF-MIB", interfaceIndex.getModule().getId());
-        String source = interfaceIndex.getModule().getIdToken().getLocation().getSource();
-        assertTrue(source.contains("IF-MIB"));
-        assertEquals(SmiTextualConvention.class, interfaceIndex.getClass());
-        assertNotNull(interfaceIndex.getRangeConstraints());
-        assertEquals(1, interfaceIndex.getRangeConstraints().size());
-        assertEquals(SmiVarBindField.INTEGER_VALUE, interfaceIndex.getVarBindField());
+		SmiVariable ifAdminStatus = ifModule.findVariable("ifAdminStatus");
+		assertNotNull(ifAdminStatus);
+		assertEquals("1.3.6.1.2.1.2.2.1.7", ifAdminStatus.getOidStr());
+	}
 
-        SmiTable ifTable = ifModule.findTable("ifTable");
-        assertNotNull(ifTable);
-        assertEquals("1.3.6.1.2.1.2.2", ifTable.getOidStr());
-        Collection<SmiTable> ifTables = mib.getTables().findAll("ifTable");
-        assertEquals(2, ifTables.size());
-        assertTrue(ifTables.contains(ifTable));
+	@Test
+	public void testJobMonitoringMib() {
+		SmiOidValue jobmonMIB = getMib().getOidValues().find("jobmonMIB");
+		assertNotNull(jobmonMIB);
+		assertEquals("1.3.6.1.4.1.2699.1.1", jobmonMIB.getOidStr());
+	}
 
-        SmiRow ifEntry = ifModule.findRow("ifEntry");
-        assertNotNull(ifEntry);
-        assertEquals("1.3.6.1.2.1.2.2.1", ifEntry.getOidStr());
-        assertSame(ifEntry.getTable(), ifTable);
+	@Test
+	public void testDlswMib() {
+		SmiOidValue nullSymbol = getMib().getOidValues().find("null");
+		assertNotNull(nullSymbol);
+		assertEquals("0.0", nullSymbol.getOidStr());
+	}
 
-        SmiVariable ifAdminStatus = ifModule.findVariable("ifAdminStatus");
-        assertNotNull(ifAdminStatus);
-        assertEquals("1.3.6.1.2.1.2.2.1.7", ifAdminStatus.getOidStr());
-    }
+	@Test
+	public void testDismanPingMib() {
+		SmiMib mib = getMib();
+		Collection<SmiSymbol> pingMIBs = mib.getSymbols().findAll("pingMIB");
+		assertEquals(2, pingMIBs.size());
 
-    public void testJobMonitoringMib() {
-        SmiOidValue jobmonMIB = getMib().getOidValues().find("jobmonMIB");
-        assertNotNull(jobmonMIB);
-        assertEquals("1.3.6.1.4.1.2699.1.1", jobmonMIB.getOidStr());
-    }
+		SmiModule dismanPingModule = mib.findModule("DISMAN-PING-MIB");
+		SmiOidValue dismanPingMIB = dismanPingModule.findOidValue("pingMIB");
+		assertNotNull(dismanPingMIB);
+		assertNotNull(dismanPingMIB.getNode().getParent());
+		assertEquals(mib.getRootNode(), dismanPingMIB.getNode().getRootNode());
+		assertEquals(4, dismanPingMIB.getNode().getChildren().size());
+		assertTrue(pingMIBs.contains(dismanPingMIB));
 
-    public void testDlswMib() {
-        SmiOidValue nullSymbol = getMib().getOidValues().find("null");
-        assertNotNull(nullSymbol);
-        assertEquals("0.0", nullSymbol.getOidStr());
-    }
+		// tubsPingMIB.dumpTree(System.out, "");
 
-    public void testDismanPingMib() {
-        SmiMib mib = getMib();
-        Collection<SmiSymbol> pingMIBs = mib.getSymbols().findAll("pingMIB");
-        assertEquals(2, pingMIBs.size());
+		SmiModule tubsPingModule = mib.findModule("TUBS-IBR-PING-MIB");
+		SmiOidValue tubsPingMIB = tubsPingModule.findOidValue("pingMIB");
+		assertNotNull(tubsPingMIB);
+		assertNotNull(tubsPingMIB.getNode().getParent());
+		assertEquals(mib.getRootNode(), tubsPingMIB.getNode().getRootNode());
+		assertEquals(2, tubsPingMIB.getNode().getChildren().size());
+		assertTrue(pingMIBs.contains(tubsPingMIB));
 
-        SmiModule dismanPingModule = mib.findModule("DISMAN-PING-MIB");
-        SmiOidValue dismanPingMIB = dismanPingModule.findOidValue("pingMIB");
-        assertNotNull(dismanPingMIB);
-        assertNotNull(dismanPingMIB.getNode().getParent());
-        assertEquals(mib.getRootNode(), dismanPingMIB.getNode().getRootNode());
-        assertEquals(4, dismanPingMIB.getNode().getChildren().size());
-        assertTrue(pingMIBs.contains(dismanPingMIB));
+	}
 
-        //tubsPingMIB.dumpTree(System.out, "");
+	@Test
+	public void testComplexIndex() {
+		SmiMib mib = getMib();
+		for (SmiRow row : mib.getRows()) {
+			if (row.getAugments() == null) {
+				assertNotNull(row.getIndexes());
+				assertTrue(row.getId(), !row.getIndexes().isEmpty());
+			}
+		}
 
-        SmiModule tubsPingModule = mib.findModule("TUBS-IBR-PING-MIB");
-        SmiOidValue tubsPingMIB = tubsPingModule.findOidValue("pingMIB");
-        assertNotNull(tubsPingMIB);
-        assertNotNull(tubsPingMIB.getNode().getParent());
-        assertEquals(mib.getRootNode(), tubsPingMIB.getNode().getRootNode());
-        assertEquals(2, tubsPingMIB.getNode().getChildren().size());
-        assertTrue(pingMIBs.contains(tubsPingMIB));
+		SmiRow row = mib.getRows().find("mallocScopeNameEntry");
+		assertNotNull(row);
+		assertEquals(3, row.getIndexes().size());
+		SmiIndex index1 = row.getIndexes().get(0);
+		SmiIndex index2 = row.getIndexes().get(1);
+		SmiIndex index3 = row.getIndexes().get(2);
 
-    }
+		assertEquals("mallocScopeAddressType", index1.getColumn().getId());
+		assertFalse(index1.isImplied());
+		assertNotNull(index1.getColumn().getRow());
+		assertNotSame(row, index1.getColumn().getRow());
 
-    public void testComplexIndex() {
-        SmiMib mib = getMib();
-        for (SmiRow row : mib.getRows()) {
-            if (row.getAugments() == null) {
-                assertNotNull(row.getIndexes());
-                assertTrue(row.getId(), !row.getIndexes().isEmpty());
-            }
-        }
+		assertEquals("mallocScopeFirstAddress", index2.getColumn().getId());
+		assertFalse(index2.isImplied());
+		assertNotNull(index2.getColumn().getRow());
+		assertNotSame(row, index2.getColumn().getRow());
 
-        SmiRow row = mib.getRows().find("mallocScopeNameEntry");
-        assertNotNull(row);
-        assertEquals(3, row.getIndexes().size());
-        SmiIndex index1 = row.getIndexes().get(0);
-        SmiIndex index2 = row.getIndexes().get(1);
-        SmiIndex index3 = row.getIndexes().get(2);
+		assertEquals("mallocScopeNameLangName", index3.getColumn().getId());
+		assertTrue(index3.isImplied());
+		assertNotNull(index3.getColumn().getRow());
+		assertSame(row, index3.getColumn().getRow());
 
+	}
 
-        assertEquals("mallocScopeAddressType", index1.getColumn().getId());
-        assertFalse(index1.isImplied());
-        assertNotNull(index1.getColumn().getRow());
-        assertNotSame(row, index1.getColumn().getRow());
+	private List<URL> initFileParserOptions(File mibsDir, String... subDirNames)
+			throws Exception {
+		List<URL> result = new ArrayList<URL>();
 
-        assertEquals("mallocScopeFirstAddress", index2.getColumn().getId());
-        assertFalse(index2.isImplied());
-        assertNotNull(index2.getColumn().getRow());
-        assertNotSame(row, index2.getColumn().getRow());
+		for (String subDirName : subDirNames) {
+			File dir = new File(mibsDir, subDirName);
+			assertTrue(dir.toString(), dir.exists());
+			assertTrue(dir.toString(), dir.isDirectory());
 
-        assertEquals("mallocScopeNameLangName", index3.getColumn().getId());
-        assertTrue(index3.isImplied());
-        assertNotNull(index3.getColumn().getRow());
-        assertSame(row, index3.getColumn().getRow());
-
-    }
-
-    private List<URL> initFileParserOptions(File mibsDir, String... subDirNames) throws Exception {
-        List<URL> result = new ArrayList<URL>();
-
-        for (String subDirName : subDirNames) {
-            File dir = new File(mibsDir, subDirName);
-            assertTrue(dir.toString(), dir.exists());
-            assertTrue(dir.toString(), dir.isDirectory());
-
-            FileURLListFactory urlListFactory = new FileURLListFactory(dir);
-            File[] files = dir.listFiles();
-            for (File file : files) {
-                if (file.isFile()
-                        && !file.getName().equals("RFC1158-MIB") // obsoleted by RFC-1213
-                        && !file.getName().contains("TOTAL")
-                        && !file.getName().endsWith("tree")
-                        && !file.getName().startsWith("Makefile")
-                        && !file.getName().endsWith("~")
-                        //&& !v1mibs.contains(file.getName())
-                        && !file.getName().endsWith("-orig")) { // TODO parsing -orig should give more errors!
-                    urlListFactory.add(file.getName());
-                }
-            }
-            result.addAll(urlListFactory.create());
-        }
-        return result;
-    }
-
+			FileURLListFactory urlListFactory = new FileURLListFactory(dir);
+			File[] files = dir.listFiles();
+			for (File file : files) {
+				if (file.isFile()
+						&& !file.getName().equals("RFC1158-MIB") // obsoleted by
+																	// RFC-1213
+						&& !file.getName().contains("TOTAL")
+						&& !file.getName().endsWith("tree")
+						&& !file.getName().startsWith("Makefile")
+						&& !file.getName().endsWith("~")
+						// && !v1mibs.contains(file.getName())
+						&& !file.getName().endsWith("-orig")) { // TODO parsing
+																// -orig should
+																// give more
+																// errors!
+					urlListFactory.add(file.getName());
+				}
+			}
+			result.addAll(urlListFactory.create());
+		}
+		return result;
+	}
 
 }

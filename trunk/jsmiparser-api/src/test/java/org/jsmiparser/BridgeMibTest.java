@@ -15,48 +15,58 @@
  */
 package org.jsmiparser;
 
-import org.jsmiparser.smi.SmiTextualConvention;
-import org.jsmiparser.smi.SmiPrimitiveType;
-import org.jsmiparser.smi.SmiVariable;
-import org.jsmiparser.smi.SmiType;
-import org.jsmiparser.smi.SmiModule;
-import org.jsmiparser.smi.SmiRange;
-import org.jsmiparser.smi.SmiVersion;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import java.util.List;
 
+import org.jsmiparser.smi.SmiModule;
+import org.jsmiparser.smi.SmiPrimitiveType;
+import org.jsmiparser.smi.SmiRange;
+import org.jsmiparser.smi.SmiTextualConvention;
+import org.jsmiparser.smi.SmiType;
+import org.jsmiparser.smi.SmiVariable;
+import org.jsmiparser.smi.SmiVersion;
+import org.junit.Test;
+
 public class BridgeMibTest extends AbstractMibTestCase {
 
-    public BridgeMibTest() {
-        super(SmiVersion.V2,
-                "libsmi-0.4.5/mibs/iana/IANAifType-MIB",
-                "libsmi-0.4.5/mibs/ietf/IF-MIB",
-                "libsmi-0.4.5/mibs/ietf/BRIDGE-MIB");
-    }
+	public BridgeMibTest() {
+		super(SmiVersion.V2, "libsmi-0.4.5/mibs/iana/IANAifType-MIB",
+				"libsmi-0.4.5/mibs/ietf/IF-MIB",
+				"libsmi-0.4.5/mibs/ietf/BRIDGE-MIB");
+	}
 
-    public void testBridgeMib() {
-        SmiType integer32 = getInteger32();
+	@Test
+	public void testBridgeMib() {
+		SmiType integer32 = getInteger32();
 
-        SmiModule bridgeMib = getMib().findModule("BRIDGE-MIB");
-        assertEquals("BRIDGE-MIB", bridgeMib.getId());
+		SmiModule bridgeMib = getMib().findModule("BRIDGE-MIB");
+		assertEquals("BRIDGE-MIB", bridgeMib.getId());
 
-        SmiTextualConvention timeout = getMib().getTextualConventions().find("Timeout");
-        assertNotNull(timeout);
-        assertEquals(integer32, timeout.getBaseType());
-        assertEquals(SmiPrimitiveType.INTEGER_32, timeout.getPrimitiveType());
-        assertNull(timeout.getRangeConstraints());
+		SmiTextualConvention timeout = getMib().getTextualConventions().find(
+				"Timeout");
+		assertNotNull(timeout);
+		assertEquals(integer32, timeout.getBaseType());
+		assertEquals(SmiPrimitiveType.INTEGER_32, timeout.getPrimitiveType());
+		assertNull(timeout.getRangeConstraints());
 
-        SmiVariable dot1dStpBridgeMaxAge = getMib().getVariables().find("dot1dStpBridgeMaxAge");
-        assertNotNull(dot1dStpBridgeMaxAge);
-        SmiType anonymousType = dot1dStpBridgeMaxAge.getType();
-        assertNull(anonymousType.getIdToken());
-        assertSame(timeout, anonymousType.getBaseType());
-        assertEquals(SmiPrimitiveType.INTEGER_32, dot1dStpBridgeMaxAge.getType().getPrimitiveType());
-        List<SmiRange> dot1dStpBridgeMaxAgeRangeConstraints = dot1dStpBridgeMaxAge.getType().getRangeConstraints();
-        assertEquals(1, dot1dStpBridgeMaxAgeRangeConstraints.size());
-        assertEquals(600, dot1dStpBridgeMaxAgeRangeConstraints.get(0).getMinValue().intValue());
-        assertEquals(4000, dot1dStpBridgeMaxAgeRangeConstraints.get(0).getMaxValue().intValue());
-    }
-
-
+		SmiVariable dot1dStpBridgeMaxAge = getMib().getVariables().find(
+				"dot1dStpBridgeMaxAge");
+		assertNotNull(dot1dStpBridgeMaxAge);
+		SmiType anonymousType = dot1dStpBridgeMaxAge.getType();
+		assertNull(anonymousType.getIdToken());
+		assertSame(timeout, anonymousType.getBaseType());
+		assertEquals(SmiPrimitiveType.INTEGER_32, dot1dStpBridgeMaxAge
+				.getType().getPrimitiveType());
+		List<SmiRange> dot1dStpBridgeMaxAgeRangeConstraints = dot1dStpBridgeMaxAge
+				.getType().getRangeConstraints();
+		assertEquals(1, dot1dStpBridgeMaxAgeRangeConstraints.size());
+		assertEquals(600, dot1dStpBridgeMaxAgeRangeConstraints.get(0)
+				.getMinValue().intValue());
+		assertEquals(4000, dot1dStpBridgeMaxAgeRangeConstraints.get(0)
+				.getMaxValue().intValue());
+	}
 }

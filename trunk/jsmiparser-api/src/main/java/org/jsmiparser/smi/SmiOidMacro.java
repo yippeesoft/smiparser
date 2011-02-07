@@ -22,7 +22,7 @@ import java.util.List;
 import org.jsmiparser.util.token.IdToken;
 
 public class SmiOidMacro extends SmiOidValue {
-
+	private static final long serialVersionUID = 7169921949233977970L;
 	protected StatusAll m_status;
 	protected List<String> references = new ArrayList<String>();
 

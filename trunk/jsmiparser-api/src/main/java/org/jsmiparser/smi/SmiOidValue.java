@@ -20,51 +20,55 @@ import org.jsmiparser.phase.xref.XRefProblemReporter;
 import org.jsmiparser.util.token.IdToken;
 
 public class SmiOidValue extends SmiValue {
+	private static final long serialVersionUID = 2299663627379488267L;
 
-    private OidComponent m_lastOidComponent;
+	private OidComponent m_lastOidComponent;
 
-    private SmiOidNode m_node;
+	private SmiOidNode m_node;
 
-    public SmiOidValue(IdToken idToken, SmiModule module) {
-        super(idToken, module);
-    }
+	public SmiOidValue(IdToken idToken, SmiModule module) {
+		super(idToken, module);
+	}
 
-    public SmiOidValue(IdToken idToken, SmiModule internalModule, SmiOidNode node) {
-        super(idToken, internalModule);
-        m_node = node;
-    }
+	public SmiOidValue(IdToken idToken, SmiModule internalModule,
+			SmiOidNode node) {
+		super(idToken, internalModule);
+		m_node = node;
+	}
 
-    public OidComponent getLastOidComponent() {
-        return m_lastOidComponent;
-    }
+	public OidComponent getLastOidComponent() {
+		return m_lastOidComponent;
+	}
 
-    public void setLastOidComponent(OidComponent lastOidComponent) {
-        m_lastOidComponent = lastOidComponent;
-    }
+	public void setLastOidComponent(OidComponent lastOidComponent) {
+		m_lastOidComponent = lastOidComponent;
+	}
 
-    public int[] getOid() {
-        return m_node.getOid();
-    }
+	public int[] getOid() {
+		return m_node.getOid();
+	}
 
-    /**
-     * @return null for the root node; the OID in decimal dotted notation for all other nodes
-     */
-    public String getOidStr() {
-        return m_node.getOidStr();
-    }
+	/**
+	 * @return null for the root node; the OID in decimal dotted notation for
+	 *         all other nodes
+	 */
+	public String getOidStr() {
+		return m_node.getOidStr();
+	}
 
-    public SmiOidNode resolveOid(XRefProblemReporter reporter) {
-        if (m_node == null) {
-            m_node = m_lastOidComponent.resolveNode(getModule(), reporter);
-            if (m_node != null) {
-                m_node.getValues().add(this);
-            }
-            // assumption is that another error has already been reported for this
-        }
-        return m_node;
-    }
+	public SmiOidNode resolveOid(XRefProblemReporter reporter) {
+		if (m_node == null) {
+			m_node = m_lastOidComponent.resolveNode(getModule(), reporter);
+			if (m_node != null) {
+				m_node.getValues().add(this);
+			}
+			// assumption is that another error has already been reported for
+			// this
+		}
+		return m_node;
+	}
 
-    public SmiOidNode getNode() {
-        return m_node;
-    }
+	public SmiOidNode getNode() {
+		return m_node;
+	}
 }

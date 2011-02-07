@@ -105,7 +105,7 @@
 					<version>2.1</version>
 					<configuration>
 						<useReleaseProfile>true</useReleaseProfile>
-						<preparationGoals>clean install depoly</preparationGoals>
+						<preparationGoals>clean install deploy</preparationGoals>
 						<goals>deploy</goals>
 						<arguments>-Prelease,deploy</arguments>
 						<autoVersionSubmodules>true</autoVersionSubmodules>

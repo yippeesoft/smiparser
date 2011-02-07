@@ -1,2 +1,2 @@
-mvn --batch-mode release:clean release:prepare
+mvn --batch-mode release:clean release:prepare release:clean
 

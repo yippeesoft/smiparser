@@ -15,10 +15,7 @@
  */
 package org.jsmiparser;
 
-import java.util.List;
-
 import org.jsmiparser.smi.SmiMib;
-import org.jsmiparser.smi.SmiOidMacro;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 public class SpringTest extends AbstractDependencyInjectionSpringContextTests {

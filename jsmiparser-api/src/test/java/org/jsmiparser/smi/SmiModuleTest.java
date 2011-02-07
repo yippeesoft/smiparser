@@ -15,16 +15,21 @@
  */
 package org.jsmiparser.smi;
 
-import junit.framework.TestCase;
-import org.jsmiparser.util.token.IdToken;
+import static org.junit.Assert.assertEquals;
+
 import org.jsmiparser.util.location.Location;
+import org.jsmiparser.util.token.IdToken;
+import org.junit.Test;
 
-public class SmiModuleTest extends TestCase {
-    private SmiMib m_mib = new SmiMib(new SmiOptions(), new SmiJavaCodeNamingStrategy("test"));
-    private SmiModule m_module = new SmiModule(m_mib, new IdToken(new Location("IF-MIBsource", 1, 0), "IF-MIB"));
+public class SmiModuleTest {
+	private SmiMib m_mib = new SmiMib(new SmiOptions(),
+			new SmiJavaCodeNamingStrategy("test"));
+	private SmiModule m_module = new SmiModule(m_mib, new IdToken(new Location(
+			"IF-MIBsource", 1, 0), "IF-MIB"));
 
-    public void testGetJavaId() {
-        assertEquals("IfMib", m_module.getCodeId());
-    }
+	@Test
+	public void testGetJavaId() {
+		assertEquals("IfMib", m_module.getCodeId());
+	}
 
 }

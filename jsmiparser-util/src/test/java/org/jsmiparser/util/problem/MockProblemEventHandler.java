@@ -16,7 +16,7 @@
 package org.jsmiparser.util.problem;
 
 
-public class TestProblemEventHandler extends AbstractProblemEventHandler {
+public class MockProblemEventHandler extends AbstractProblemEventHandler {
 
     private ProblemEvent m_lastProblemEvent;
 

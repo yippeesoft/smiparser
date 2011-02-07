@@ -15,60 +15,63 @@
  */
 package org.jsmiparser.smi;
 
-import junit.framework.TestCase;
-import org.jsmiparser.smi.SmiJavaCodeNamingStrategy;
+import static org.junit.Assert.assertEquals;
 
-public class SmiJavaCodeNamingStrategyTest extends TestCase {
+import org.junit.Test;
 
+public class SmiJavaCodeNamingStrategyTest {
 
-//	public void testSplitAroundLettersAndDigits() {
-//		SmiJavaCodeNamingStrategy ns = new SmiJavaCodeNamingStrategy("test");
-//		
-//		List<String> parts = ns.splitAroundLettersAndDigits("");
-//		assertEquals(0, parts.size());
-//		
-//		parts = ns.splitAroundLettersAndDigits("a");
-//		assertEquals(1, parts.size());
-//		assertEquals()
-//
-//	}
+	// public void testSplitAroundLettersAndDigits() {
+	// SmiJavaCodeNamingStrategy ns = new SmiJavaCodeNamingStrategy("test");
+	//
+	// List<String> parts = ns.splitAroundLettersAndDigits("");
+	// assertEquals(0, parts.size());
+	//
+	// parts = ns.splitAroundLettersAndDigits("a");
+	// assertEquals(1, parts.size());
+	// assertEquals()
+	//
+	// }
+	@Test
+	public void testMakeConstant() {
 
-    public void testMakeConstant() {
+		SmiJavaCodeNamingStrategy ns = new SmiJavaCodeNamingStrategy("test");
+		assertEquals("IF_LAST_CHANGE", ns.makeConstant("ifLastChange"));
+		assertEquals("IF_LAST_CHANGE", ns.makeConstant("if_last_change"));
+		assertEquals("IF_LAST_CHANGE", ns.makeConstant("if_Last_Change"));
+		assertEquals("IF_LAST_CHANGE", ns.makeConstant("if_last_Change"));
 
-        SmiJavaCodeNamingStrategy ns = new SmiJavaCodeNamingStrategy("test");
-        assertEquals("IF_LAST_CHANGE", ns.makeConstant("ifLastChange"));
-        assertEquals("IF_LAST_CHANGE", ns.makeConstant("if_last_change"));
-        assertEquals("IF_LAST_CHANGE", ns.makeConstant("if_Last_Change"));
-        assertEquals("IF_LAST_CHANGE", ns.makeConstant("if_last_Change"));
+		assertEquals("IF_LAST_CHANGE", ns.makeConstant("if#last@change"));
 
-        assertEquals("IF_LAST_CHANGE", ns.makeConstant("if#last@change"));
+		// all variation on the real "ifHCPacketGroup":
+		assertEquals("IF_H_PACKET_GROUP", ns.makeConstant("ifHPacketGroup"));
+		assertEquals("IF_HC_PACKET_GROUP", ns.makeConstant("ifHCPacketGroup"));
+		assertEquals("IF_HCB_PACKET_GROUP", ns.makeConstant("ifHCBPacketGroup"));
 
+		assertEquals("IF_H_1_PACKET_GROUP", ns.makeConstant("ifH1PacketGroup"));
+		assertEquals("IF_HC_2_PACKET_GROUP",
+				ns.makeConstant("ifHC2PacketGroup"));
+		assertEquals("IF_HC_3_B_PACKET_GROUP",
+				ns.makeConstant("ifHC3BPacketGroup"));
 
-        // all variation on the real "ifHCPacketGroup":
-        assertEquals("IF_H_PACKET_GROUP", ns.makeConstant("ifHPacketGroup"));
-        assertEquals("IF_HC_PACKET_GROUP", ns.makeConstant("ifHCPacketGroup"));
-        assertEquals("IF_HCB_PACKET_GROUP", ns.makeConstant("ifHCBPacketGroup"));
+		assertEquals("IF_H_16_PACKET_GROUP",
+				ns.makeConstant("ifH16PacketGroup"));
+		assertEquals("IF_HC_27_PACKET_GROUP",
+				ns.makeConstant("ifHC27PacketGroup"));
+		assertEquals("IF_HC_38_B_PACKET_GROUP",
+				ns.makeConstant("ifHC38BPacketGroup"));
 
-        assertEquals("IF_H_1_PACKET_GROUP", ns.makeConstant("ifH1PacketGroup"));
-        assertEquals("IF_HC_2_PACKET_GROUP", ns.makeConstant("ifHC2PacketGroup"));
-        assertEquals("IF_HC_3_B_PACKET_GROUP", ns.makeConstant("ifHC3BPacketGroup"));
+		assertEquals("IF_LAST_CHANGE_1", ns.makeConstant("if_last_change1"));
+		assertEquals("IF_LAST_CHANGE_12", ns.makeConstant("if_last_change12"));
 
-        assertEquals("IF_H_16_PACKET_GROUP", ns.makeConstant("ifH16PacketGroup"));
-        assertEquals("IF_HC_27_PACKET_GROUP", ns.makeConstant("ifHC27PacketGroup"));
-        assertEquals("IF_HC_38_B_PACKET_GROUP", ns.makeConstant("ifHC38BPacketGroup"));
+		assertEquals("IF_LAST_CHANGE_1", ns.makeConstant("if_last_change_1"));
+		assertEquals("IF_LAST_CHANGE_12", ns.makeConstant("if_last_change_12"));
 
+		assertEquals("IF_LAST_1_CHANGE", ns.makeConstant("if_last1change"));
+		assertEquals("IF_LAST_12_CHANGE", ns.makeConstant("if_last12change"));
 
-        assertEquals("IF_LAST_CHANGE_1", ns.makeConstant("if_last_change1"));
-        assertEquals("IF_LAST_CHANGE_12", ns.makeConstant("if_last_change12"));
-
-        assertEquals("IF_LAST_CHANGE_1", ns.makeConstant("if_last_change_1"));
-        assertEquals("IF_LAST_CHANGE_12", ns.makeConstant("if_last_change_12"));
-
-        assertEquals("IF_LAST_1_CHANGE", ns.makeConstant("if_last1change"));
-        assertEquals("IF_LAST_12_CHANGE", ns.makeConstant("if_last12change"));
-
-        assertEquals("IF_LAST_1_CHANGE", ns.makeConstant("if_last1change"));
-        assertEquals("IF_LAST_12_CHANGE", ns.makeConstant("if_last12change"));
-    }
+		assertEquals("IF_LAST_1_CHANGE", ns.makeConstant("if_last1change"));
+		assertEquals("IF_LAST_12_CHANGE", ns.makeConstant("if_last12change"));
+	}
 
 }

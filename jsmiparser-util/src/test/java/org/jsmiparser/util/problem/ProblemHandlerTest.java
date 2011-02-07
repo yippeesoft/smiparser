@@ -15,44 +15,57 @@
  */
 package org.jsmiparser.util.problem;
 
-import junit.framework.TestCase;
-import org.jsmiparser.util.location.Location;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProblemHandlerTest extends TestCase {
-    private TestProblemEventHandler m_teh;
-    private ExampleProblemReporter m_eh;
+import org.jsmiparser.util.location.Location;
+import org.junit.Before;
+import org.junit.Test;
 
-    protected void setUp() throws Exception {
-        m_teh = new TestProblemEventHandler();
+public class ProblemHandlerTest {
+	private MockProblemEventHandler m_teh;
+	private ExampleProblemReporter m_eh;
 
-        ProblemReporterFactory factory = new DefaultProblemReporterFactory(this.getClass().getClassLoader(), m_teh);
-        m_eh = factory.create(
-                ExampleProblemReporter.class);
-    }
+	@Before
+	public void setUp() throws Exception {
+		m_teh = new MockProblemEventHandler();
 
-    public void testSimpleMessage() {
-        m_eh.simpleMessage();
-        assertNotNull(m_teh.getLastProblemEvent());
-        assertEquals("Simple message", m_teh.getLastProblemEvent().getLocalizedMessage());
-        assertNull(m_teh.getLastProblemEvent().getLocation());
-    }
+		ProblemReporterFactory factory = new DefaultProblemReporterFactory(this
+				.getClass().getClassLoader(), m_teh);
+		m_eh = factory.create(ExampleProblemReporter.class);
+	}
 
-    public void testListSize() {
-        List<String> l = new ArrayList<String>();
-        l.add("bla");
-        m_eh.reportListSize(l);
-        assertEquals("List size = 1", m_teh.getLastProblemEvent().getLocalizedMessage());
-        assertNull(m_teh.getLastProblemEvent().getLocation());
-    }
+	@Test
+	public void testSimpleMessage() {
+		m_eh.simpleMessage();
+		assertNotNull(m_teh.getLastProblemEvent());
+		assertEquals("Simple message", m_teh.getLastProblemEvent()
+				.getLocalizedMessage());
+		assertNull(m_teh.getLastProblemEvent().getLocation());
+	}
 
-    public void testLocation() {
-        Location location = new Location("/tmp/test", 77, 20);
-        m_eh.simpleLocation(location);
+	@Test
+	public void testListSize() {
+		List<String> l = new ArrayList<String>();
+		l.add("bla");
+		m_eh.reportListSize(l);
+		assertEquals("List size = 1", m_teh.getLastProblemEvent()
+				.getLocalizedMessage());
+		assertNull(m_teh.getLastProblemEvent().getLocation());
+	}
 
-        assertEquals("Simple location message", m_teh.getLastProblemEvent().getLocalizedMessage());
-        assertSame(location, m_teh.getLastProblemEvent().getLocation());
-    }
+	@Test
+	public void testLocation() {
+		Location location = new Location("/tmp/test", 77, 20);
+		m_eh.simpleLocation(location);
+
+		assertEquals("Simple location message", m_teh.getLastProblemEvent()
+				.getLocalizedMessage());
+		assertSame(location, m_teh.getLastProblemEvent().getLocation());
+	}
 }

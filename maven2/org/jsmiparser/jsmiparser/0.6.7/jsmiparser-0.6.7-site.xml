@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="Java SMI Parser">
+  <body>
+    <menu name="Modules" ref="modules">
+      <item name="Java SMI Parser Utilities" href="jsmiparser-util/index.html" />
+      <item name="Java SMI Parser API" href="jsmiparser-api/index.html" />
+    </menu>
+    <menu ref="reports" />
+  </body>
+</project>

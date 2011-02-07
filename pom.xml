@@ -107,7 +107,7 @@
 						<useReleaseProfile>true</useReleaseProfile>
 						<preparationGoals>clean install deploy</preparationGoals>
 						<goals>deploy</goals>
-						<arguments>-Prelease,deploy</arguments>
+						<arguments>-Pdeploy</arguments>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 					</configuration>
 				</plugin>

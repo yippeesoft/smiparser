@@ -16,12 +16,12 @@
 
 package org.jsmiparser.smi;
 
-import org.jsmiparser.util.token.IdToken;
-import org.jsmiparser.util.location.Location;
-
-import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
+
+import org.jsmiparser.util.location.Location;
+import org.jsmiparser.util.token.IdToken;
 
 public class SmiConstants {
 
@@ -63,9 +63,7 @@ public class SmiConstants {
     }
 
     private static Set<String> initSmiDefinitionModuleNames() {
-        String[] names = new String[] { "RFC1065-SMI", "SNMPv2-SMI" };
+       // String[] names = new String[] { "RFC1065-SMI", "SNMPv2-SMI" };
         return Collections.unmodifiableSet(new HashSet<String>());
     }
-    
-    
 }

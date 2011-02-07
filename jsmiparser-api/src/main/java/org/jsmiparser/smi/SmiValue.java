@@ -18,9 +18,9 @@ package org.jsmiparser.smi;
 import org.jsmiparser.util.token.IdToken;
 
 public abstract class SmiValue extends SmiSymbol {
+	private static final long serialVersionUID = 7551610624414592921L;
 
-    public SmiValue(IdToken idToken, SmiModule module) {
-        super(idToken, module);
-    }
-    
+	public SmiValue(IdToken idToken, SmiModule module) {
+		super(idToken, module);
+	}
 }

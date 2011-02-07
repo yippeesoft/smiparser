@@ -25,11 +25,19 @@ public class TextUtilTest {
 	public void testKeyWordMap() {
 		assertEquals(53, TextUtil.keyWordMap_.size());
 	}
+
 	@Test
 	public void testDeleteChar() {
 		assertEquals("", TextUtil.deleteChar("aa", 'a'));
 		assertEquals("aa", TextUtil.deleteChar("aa", 'b'));
 		assertEquals("IFMIB", TextUtil.deleteChar("IF-MIB", '-'));
+	}
 
+	@Test
+	public void testMakeId() {
+		assertEquals("Aa", TextUtil.makeCodeId("aa", true));
+		assertEquals("bb", TextUtil.makeCodeId("bb", false));
+		assertEquals("_", TextUtil.makeCodeId("", true));
+		assertEquals("_", TextUtil.makeCodeId(null, true));
 	}
 }

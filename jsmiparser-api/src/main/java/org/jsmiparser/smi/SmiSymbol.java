@@ -25,139 +25,140 @@ import java.util.Map;
 import java.util.Collections;
 
 public abstract class SmiSymbol implements Serializable, Comparable {
+	private static final long serialVersionUID = -5181126829777112918L;
+	private IdToken m_idToken;
+	private SmiModule m_module;
+	private Map<Object, Object> m_userData;
 
-    private IdToken m_idToken;
-    private SmiModule m_module;
-    private Map<Object, Object> m_userData;
+	public SmiSymbol(IdToken idToken, SmiModule module) {
+		super();
 
-    public SmiSymbol(IdToken idToken, SmiModule module) {
-        super();
+		if (module == null) {
+			throw new IllegalArgumentException();
+		}
 
-        if (module == null) {
-            throw new IllegalArgumentException();
-        }
+		m_idToken = idToken;
+		m_module = module;
+	}
 
-        m_idToken = idToken;
-        m_module = module;
-    }
+	public SmiSymbol(SmiModule module) {
+		super();
 
-    public SmiSymbol(SmiModule module) {
-        super();
+		if (module == null) {
+			throw new IllegalArgumentException();
+		}
 
-        if (module == null) {
-            throw new IllegalArgumentException();
-        }
+		m_module = module;
+	}
 
-        m_module = module;
-    }
+	public String getId() {
+		return m_idToken != null ? m_idToken.getId() : null;
+	}
 
-    public String getId() {
-        return m_idToken != null ? m_idToken.getId() : null;
-    }
+	public IdToken getIdToken() {
+		return m_idToken;
+	}
 
-    public IdToken getIdToken() {
-        return m_idToken;
-    }
+	public void setIdToken(IdToken idToken) {
+		m_idToken = idToken;
+	}
 
-    public void setIdToken(IdToken idToken) {
-        m_idToken = idToken;
-    }
+	// TODO should be abstract
+	public String getCodeId() {
+		return null;
+	}
 
-    //  TODO should be abstract
-    public String getCodeId() {
-        return null;
-    }
+	public String getFullCodeId() {
+		return m_module.getMib().getCodeNamingStrategy().getFullCodeId(this);
+	}
 
-    public String getFullCodeId() {
-        return m_module.getMib().getCodeNamingStrategy().getFullCodeId(this);
-    }
+	public SmiModule getModule() {
+		return m_module;
+	}
 
-    public SmiModule getModule() {
-        return m_module;
-    }
+	public Location getLocation() {
+		return m_idToken != null ? m_idToken.getLocation() : null;
+	}
 
-    public Location getLocation() {
-        return m_idToken != null ? m_idToken.getLocation() : null;
-    }
+	public String getUcId() {
+		return SmiUtil.ucFirst(getId());
+	}
 
-    public String getUcId() {
-        return SmiUtil.ucFirst(getId());
-    }
+	@Override
+	public String toString() {
+		return m_module.getId() + ": " + getId();
+	}
 
+	@Override
+	public int hashCode() {
+		if (m_idToken != null) {
+			return m_idToken.getId().hashCode();
+		}
+		return super.hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return m_module.getId() + ": " + getId();
-    }
+	/**
+	 * @param obj
+	 *            the object to compare
+	 * @return equality by SmiSymbol identifier and SmiModule
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (m_idToken != null) {
+			if (obj instanceof SmiSymbol) {
+				SmiSymbol other = (SmiSymbol) obj;
+				return this.m_module.equals(other.m_module)
+						&& other.getId().equals(this.getId());
+			}
+		}
+		return super.equals(obj);
+	}
 
-    @Override
-    public int hashCode() {
-        if (m_idToken != null) {
-            return m_idToken.getId().hashCode();
-        }
-        return super.hashCode();
-    }
+	public int compareTo(Object o) {
+		return compareTo((SmiSymbol) o);
+	}
 
-    /**
-     * @param obj the object to compare
-     * @return equality by SmiSymbol identifier and SmiModule
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (m_idToken != null) {
-            if (obj instanceof SmiSymbol) {
-                SmiSymbol other = (SmiSymbol) obj;
-                return this.m_module.equals(other.m_module) && other.getId().equals(this.getId());
-            }
-        }
-        return super.equals(obj);
-    }
+	public int compareTo(SmiSymbol other) {
+		int result = getModule().getId().compareTo(other.getModule().getId());
+		if (result == 0) {
+			result = getId().compareTo(other.getId());
+		}
+		return result;
+	}
 
-    public int compareTo(Object o) {
-        return compareTo((SmiSymbol) o);
-    }
+	public void resolveReferences(XRefProblemReporter reporter) {
+		// do nothing
+	}
 
-    public int compareTo(SmiSymbol other) {
-        int result = getModule().getId().compareTo(other.getModule().getId());
-        if (result == 0) {
-            result = getId().compareTo(other.getId());
-        }
-        return result;
-    }
+	/**
+	 * @return A non-modifiable non-null Map of all the associated user data.
+	 */
+	public Map<Object, Object> getUserData() {
+		if (m_userData == null) {
+			return Collections.emptyMap();
+		}
+		return m_userData;
+	}
 
-    public void resolveReferences(XRefProblemReporter reporter) {
-        // do nothing
-    }
+	public void addUserData(Object key, Object value) {
+		if (m_userData == null) {
+			m_userData = new HashMap<Object, Object>();
+		}
+		m_userData.put(key, value);
+	}
 
-    /**
-     * @return A non-modifiable non-null Map of all the associated user data.
-     */
-    public Map<Object, Object> getUserData() {
-        if (m_userData == null) {
-            return Collections.emptyMap();
-        }
-        return m_userData;
-    }
+	public Object findUserData(Object key) {
+		if (m_userData == null) {
+			return null;
+		}
+		return m_userData.get(key);
+	}
 
-    public void addUserData(Object key, Object value) {
-        if (m_userData == null) {
-            m_userData = new HashMap<Object, Object>();
-        }
-        m_userData.put(key, value);
-    }
-
-    public Object findUserData(Object key) {
-        if (m_userData == null) {
-            return null;
-        }
-        return m_userData.get(key);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T findUserData(Class<T> key) {
-        if (m_userData == null) {
-            return null;
-        }
-        return (T) m_userData.get(key);
-    }
+	@SuppressWarnings("unchecked")
+	public <T> T findUserData(Class<T> key) {
+		if (m_userData == null) {
+			return null;
+		}
+		return (T) m_userData.get(key);
+	}
 }

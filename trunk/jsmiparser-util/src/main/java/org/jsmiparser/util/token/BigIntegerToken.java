@@ -20,15 +20,12 @@ import java.math.BigInteger;
 import org.jsmiparser.util.location.Location;
 
 public class BigIntegerToken extends GenericToken<BigInteger> {
-
 	public BigIntegerToken(Location location, boolean negate, String value) {
 		super(location, negate ? new BigInteger(value).negate()
 				: new BigInteger(value));
 	}
 
 	public BigIntegerToken(int value) {
-		super(new Location("hardcoded", 0), new BigInteger(
-				Integer.toString(value)));
+		super(new Location("hardcoded", 0), BigInteger.valueOf(value));
 	}
-
 }

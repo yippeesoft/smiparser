@@ -20,18 +20,18 @@ import java.io.PrintStream;
 import org.jsmiparser.util.location.Location;
 
 public class DefaultProblemEventHandler extends AbstractProblemEventHandler {
-	private PrintStream m_out;
-	private PrintStream m_err;
+	private PrintStream out;
+	private PrintStream err;
 
 	public DefaultProblemEventHandler() {
 		super();
-		m_out = System.out;
-		m_err = System.err;
+		out = System.out;
+		err = System.err;
 	}
 
 	public DefaultProblemEventHandler(PrintStream out, PrintStream err) {
-		m_out = out;
-		m_err = err;
+		this.out = out;
+		this.err = err;
 	}
 
 	public void handle(ProblemEvent event) {
@@ -50,11 +50,11 @@ public class DefaultProblemEventHandler extends AbstractProblemEventHandler {
 	}
 
 	private void error(Location location, String localizedMessage) {
-		print(m_err, "Error", location, localizedMessage);
+		print(err, "Error", location, localizedMessage);
 	}
 
 	private void warning(Location location, String localizedMessage) {
-		print(m_out, "Warning", location, localizedMessage);
+		print(out, "Warning", location, localizedMessage);
 	}
 
 	private void print(PrintStream stream, String sev, Location location,

@@ -21,11 +21,11 @@ import org.jsmiparser.util.location.Location;
 
 public class HexStringToken extends StringToken {
 
-	private final char m_radixChar;
+	private final char radixChar;
 
 	public HexStringToken(Location location, String value) {
 		super(location, value.substring(1, value.length() - 2));
-		m_radixChar = value.charAt(value.length() - 1);
+		radixChar = value.charAt(value.length() - 1);
 	}
 
 	public BigInteger getIntegerValue() {
@@ -33,10 +33,10 @@ public class HexStringToken extends StringToken {
 	}
 
 	public String toString() {
-		return "'" + getValue() + "'" + m_radixChar;
+		return "'" + getValue() + "'" + radixChar;
 	}
 
 	public char getRadixChar() {
-		return m_radixChar;
+		return radixChar;
 	}
 }

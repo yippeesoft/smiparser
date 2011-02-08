@@ -18,9 +18,7 @@ package org.jsmiparser.util.token;
 import org.jsmiparser.util.location.Location;
 
 public interface Token {
-
 	Location getLocation();
 
 	Object getObject();
-
 }

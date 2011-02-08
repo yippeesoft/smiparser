@@ -31,6 +31,7 @@ public class HexStringTokenTest {
 				"'7FFF'h");
 		BigInteger value = t.getIntegerValue();
 		assertEquals(0x7FFF, value.intValue());
+		assertEquals(104, t.getRadixChar());
 	}
 
 	@Test

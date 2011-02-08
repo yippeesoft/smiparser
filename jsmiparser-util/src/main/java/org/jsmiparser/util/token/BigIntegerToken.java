@@ -1,11 +1,11 @@
-/*
- * Copyright 2005 Davy Verstappen.
+/**
+ * Copyright 2011-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,19 +15,20 @@
  */
 package org.jsmiparser.util.token;
 
-import org.jsmiparser.util.location.Location;
-
 import java.math.BigInteger;
+
+import org.jsmiparser.util.location.Location;
 
 public class BigIntegerToken extends GenericToken<BigInteger> {
 
+	public BigIntegerToken(Location location, boolean negate, String value) {
+		super(location, negate ? new BigInteger(value).negate()
+				: new BigInteger(value));
+	}
 
-    public BigIntegerToken(Location location, boolean negate, String value) {
-        super(location, negate ? new BigInteger(value).negate() : new BigInteger(value));
-    }
-    
-    public BigIntegerToken(int value) {
-        super(new Location("hardcoded", 0), new BigInteger(Integer.toString(value)));
-    }
+	public BigIntegerToken(int value) {
+		super(new Location("hardcoded", 0), new BigInteger(
+				Integer.toString(value)));
+	}
 
 }

@@ -1,11 +1,11 @@
-/*
- * Copyright 2007 Davy Verstappen.
+/**
+ * Copyright 2011-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,31 +17,31 @@ package org.jsmiparser.util.pair;
 
 public class StringIntPair extends Pair<String, Integer> {
 
-    public StringIntPair(String first, Integer second) {
-        super(first, second);
-    }
+	public StringIntPair(String first, Integer second) {
+		super(first, second);
+	}
 
-    public StringIntPair(String first) {
-        super(first, null);
-    }
+	public StringIntPair(String first) {
+		super(first, null);
+	}
 
-    public StringIntPair(Integer second) {
-        super(null, second);
-    }
+	public StringIntPair(Integer second) {
+		super(null, second);
+	}
 
-    public String getString() {
-        return getFirst();
-    }
+	public String getString() {
+		return getFirst();
+	}
 
-    public void setString(String str) {
-        setFirst(str);
-    }
+	public void setString(String str) {
+		setFirst(str);
+	}
 
-    public Integer getInt() {
-        return getSecond();
-    }
+	public Integer getInt() {
+		return getSecond();
+	}
 
-    public void setInt(Integer i) {
-        setSecond(i);
-    }
+	public void setInt(Integer i) {
+		setSecond(i);
+	}
 }

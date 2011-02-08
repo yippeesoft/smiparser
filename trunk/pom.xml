@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jsmiparser</groupId>
 	<artifactId>jsmiparser</artifactId>
@@ -27,6 +28,7 @@
 		<url>http://code.google.com/p/smiparser/issues/list</url>
 	</issueManagement>
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<createChecksum>true</createChecksum>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
@@ -37,6 +39,8 @@
 		<spring-beans.version>3.0.5.RELEASE</spring-beans.version>
 		<spring-test.version>3.0.5.RELEASE</spring-test.version>
 		<antlr.version>2.7.6</antlr.version>
+		<maven-license-plugin.version>1.9.0</maven-license-plugin.version>
+		<maven-antlr-plugin.version>2.0-beta-1</maven-antlr-plugin.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -86,9 +90,18 @@
 				<artifactId>spring-test</artifactId>
 				<version>${spring-test.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>${maven-license-plugin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antlr-plugin</artifactId>
+				<version>${maven-antlr-plugin.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<distributionManagement>
 		<repository>
 			<id>smiparser.googlecode.repo</id>
@@ -120,6 +133,26 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<inherited>false</inherited>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.9.0</version>
+				<configuration>
+					<header>${basedir}/header.txt</header>
+					<failIfMissing>true</failIfMissing>
+					<aggregate>true</aggregate>
+					<strictCheck>true</strictCheck>
+					<properties>
+						<inceptionYear>${project.inceptionYear}</inceptionYear>
+						<year>${project.inceptionYear}</year>
+					</properties>
+					<includes>
+						<include>src/main/java/**</include>
+						<include>src/test/java/**</include>
+					</includes>
 				</configuration>
 			</plugin>
 		</plugins>

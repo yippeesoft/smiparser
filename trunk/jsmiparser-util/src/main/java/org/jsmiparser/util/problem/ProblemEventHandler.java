@@ -1,12 +1,12 @@
-/*
- * Copyright 2005 Davy Verstappen.
- * 
+/**
+ * Copyright 2011-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,19 +19,20 @@ import org.jsmiparser.util.problem.annotations.ProblemSeverity;
 
 public interface ProblemEventHandler {
 
-    void handle(ProblemEvent event);
+	void handle(ProblemEvent event);
 
-    /**
-     * @return true if there were FATAL or ERROR events.
-     */
-    boolean isOk();
+	/**
+	 * @return true if there were FATAL or ERROR events.
+	 */
+	boolean isOk();
 
-    /**
-     * @return true if there were no problem with a severity higher than or equal to ERROR
-     */
-    boolean isNotOk();
+	/**
+	 * @return true if there were no problem with a severity higher than or
+	 *         equal to ERROR
+	 */
+	boolean isNotOk();
 
-    int getSeverityCount(ProblemSeverity severity);
+	int getSeverityCount(ProblemSeverity severity);
 
-    int getTotalCount();
+	int getTotalCount();
 }

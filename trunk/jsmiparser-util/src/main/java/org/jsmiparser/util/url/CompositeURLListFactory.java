@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CompositeURLListFactory implements URLListFactory {
-
 	private List<URLListFactory> children;
 
 	public CompositeURLListFactory() {

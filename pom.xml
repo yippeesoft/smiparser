@@ -41,6 +41,7 @@
 		<antlr.version>2.7.6</antlr.version>
 		<maven-license-plugin.version>1.9.0</maven-license-plugin.version>
 		<maven-antlr-plugin.version>2.0-beta-1</maven-antlr-plugin.version>
+		<easymock.version>3.0</easymock.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -58,7 +59,6 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
@@ -99,6 +99,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antlr-plugin</artifactId>
 				<version>${maven-antlr-plugin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>${easymock.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

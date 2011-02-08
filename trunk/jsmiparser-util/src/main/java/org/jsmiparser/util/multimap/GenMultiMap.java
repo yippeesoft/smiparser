@@ -33,7 +33,7 @@ public class GenMultiMap<K, V> implements Serializable {
 
 	static final long serialVersionUID = 1;
 
-	protected MultiMap m_impl;
+	protected MultiMap multiMap;
 
 	public static <K, V> GenMultiMap<K, V> hashMap() {
 		return new GenMultiMap<K, V>(MultiValueMap.decorate(new HashMap(),
@@ -46,7 +46,7 @@ public class GenMultiMap<K, V> implements Serializable {
 	}
 
 	public GenMultiMap(MultiMap impl) {
-		m_impl = impl;
+		multiMap = impl;
 	}
 
 	public int size() {
@@ -54,23 +54,23 @@ public class GenMultiMap<K, V> implements Serializable {
 		// of entries in the map
 		// but what we really want is the total number of symbols in our symbol
 		// maps
-		return m_impl.values().size();
+		return multiMap.values().size();
 	}
 
 	public boolean isEmpty() {
-		return m_impl.isEmpty();
+		return multiMap.isEmpty();
 	}
 
 	public boolean containsKey(K key) {
-		return m_impl.containsKey(key);
+		return multiMap.containsKey(key);
 	}
 
 	public boolean containsValue(V value) {
-		return m_impl.containsValue(value);
+		return multiMap.containsValue(value);
 	}
 
 	public List<V> getAll(K key) {
-		List<V> result = (List<V>) m_impl.get(key);
+		List<V> result = (List<V>) multiMap.get(key);
 		if (result == null) {
 			result = Collections.emptyList();
 		}
@@ -78,7 +78,7 @@ public class GenMultiMap<K, V> implements Serializable {
 	}
 
 	public V getOne(K key) throws IllegalArgumentException {
-		List<V> all = (List<V>) m_impl.get(key);
+		List<V> all = (List<V>) multiMap.get(key);
 		if (all == null) {
 			return null;
 		}
@@ -92,7 +92,7 @@ public class GenMultiMap<K, V> implements Serializable {
 	public List<V> put(K key, Collection<V> value) {
 		List<V> result = new ArrayList<V>();
 		for (V v : value) {
-			Object insertedObject = m_impl.put(key, v);
+			Object insertedObject = multiMap.put(key, v);
 			if (insertedObject != null) {
 				result.add((V) insertedObject);
 			}
@@ -101,15 +101,15 @@ public class GenMultiMap<K, V> implements Serializable {
 	}
 
 	public V put(K key, V value) {
-		return (V) m_impl.put(key, value);
+		return (V) multiMap.put(key, value);
 	}
 
 	public Collection<V> remove(K key) {
-		return (Collection<V>) m_impl.remove(key);
+		return (Collection<V>) multiMap.remove(key);
 	}
 
 	public void putAllMultiMap(Map<? extends K, ? extends Collection<V>> t) {
-		m_impl.putAll(t);
+		multiMap.putAll(t);
 	}
 
 	public void putAll(Map<? extends K, ? extends V> map) {
@@ -119,18 +119,18 @@ public class GenMultiMap<K, V> implements Serializable {
 	}
 
 	public void clear() {
-		m_impl.clear();
+		multiMap.clear();
 	}
 
 	public Set<K> keySet() {
-		return m_impl.keySet();
+		return multiMap.keySet();
 	}
 
 	public Collection<V> values() {
-		return m_impl.values();
+		return multiMap.values();
 	}
 
 	public Set<Map.Entry<K, List<V>>> entrySet() {
-		return m_impl.entrySet();
+		return multiMap.entrySet();
 	}
 }

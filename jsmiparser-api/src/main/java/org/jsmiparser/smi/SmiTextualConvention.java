@@ -18,50 +18,50 @@ package org.jsmiparser.smi;
 import org.jsmiparser.util.token.IdToken;
 
 public class SmiTextualConvention extends SmiType {
+	private String displayHint;
+	private StatusV2 statusV2;
+	private String description;
+	private String reference;
 
-    private String m_displayHint;
-    private StatusV2 m_statusV2;
-    private String m_description;
-    private String m_reference;
+	public SmiTextualConvention(IdToken idToken, SmiModule module,
+			String displayHint, StatusV2 statusV2, String description,
+			String reference) {
+		super(idToken, module);
+		this.displayHint = displayHint;
+		this.statusV2 = statusV2;
+		this.description = description;
+		this.reference = reference;
+	}
 
-    public SmiTextualConvention(IdToken idToken, SmiModule module, String displayHint, StatusV2 statusV2, String description, String reference) {
-        super(idToken, module);
-        m_displayHint = displayHint;
-        m_statusV2 = statusV2;
-        m_description = description;
-        m_reference = reference;
-    }
+	public String getDisplayHint() {
+		return displayHint;
+	}
 
-    public String getDisplayHint() {
-        return m_displayHint;
-    }
+	public void setDisplayHint(String displayHint) {
+		this.displayHint = displayHint;
+	}
 
-    public void setDisplayHint(String displayHint) {
-        m_displayHint = displayHint;
-    }
+	public StatusV2 getStatusV2() {
+		return statusV2;
+	}
 
-    public StatusV2 getStatusV2() {
-        return m_statusV2;
-    }
+	public void setStatusV2(StatusV2 statusV2) {
+		this.statusV2 = statusV2;
+	}
 
-    public void setStatusV2(StatusV2 statusV2) {
-        m_statusV2 = statusV2;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getDescription() {
-        return m_description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setDescription(String description) {
-        m_description = description;
-    }
+	public String getReference() {
+		return reference;
+	}
 
-    public String getReference() {
-        return m_reference;
-    }
-
-    public void setReference(String reference) {
-        m_reference = reference;
-    }
-
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
 }

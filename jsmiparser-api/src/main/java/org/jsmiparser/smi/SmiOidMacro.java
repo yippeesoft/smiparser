@@ -22,7 +22,7 @@ import org.jsmiparser.util.token.IdToken;
 
 public class SmiOidMacro extends SmiOidValue {
 	private static final long serialVersionUID = 7169921949233977970L;
-	protected StatusAll m_status;
+	protected StatusAll status;
 	protected List<String> references = new ArrayList<String>();
 
 	public SmiOidMacro(IdToken idToken, SmiModule module) {
@@ -30,15 +30,15 @@ public class SmiOidMacro extends SmiOidValue {
 	}
 
 	public StatusAll getStatus() {
-		return m_status;
+		return status;
 	}
 
 	public StatusV1 getStatusV1() {
-		return m_status.getStatusV1();
+		return status.getStatusV1();
 	}
 
 	public StatusV2 getStatusV2() {
-		return m_status.getStatusV2();
+		return status.getStatusV2();
 	}
 
 	public List<String> getReferences() {

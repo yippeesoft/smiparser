@@ -16,24 +16,23 @@
 package org.jsmiparser.smi;
 
 public enum AgentCapabilitiesStatus {
-    CURRENT(StatusAll.CURRENT),
-    OBSOLETE(StatusAll.OBSOLETE);
+	CURRENT(StatusAll.CURRENT), OBSOLETE(StatusAll.OBSOLETE);
 
-    private StatusAll m_statusAll;
+	private StatusAll m_statusAll;
 
-    private AgentCapabilitiesStatus(StatusAll statusAll) {
-        m_statusAll = statusAll;
-    }
+	private AgentCapabilitiesStatus(StatusAll statusAll) {
+		m_statusAll = statusAll;
+	}
 
-    public StatusAll getStatusAll() {
-        return m_statusAll;
-    }
+	public StatusAll getStatusAll() {
+		return m_statusAll;
+	}
 
-    public String toString() {
-        return m_statusAll.toString();
-    }
+	public String toString() {
+		return m_statusAll.toString();
+	}
 
-    public static AgentCapabilitiesStatus find(String keyword, boolean mandatory) {
-        return Util.find(AgentCapabilitiesStatus.class, keyword, mandatory);
-    }
+	public static AgentCapabilitiesStatus find(String keyword, boolean mandatory) {
+		return Util.find(AgentCapabilitiesStatus.class, keyword, mandatory);
+	}
 }

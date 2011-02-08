@@ -21,18 +21,18 @@ public enum ModuleComplianceAccess {
     READ_ONLY(AccessAll.READ_ONLY),
     READ_WRITE(AccessAll.READ_WRITE);
 
-    private AccessAll m_accessAll;
+    private AccessAll accessAll;
 
     ModuleComplianceAccess(AccessAll accessAll) {
-        m_accessAll = accessAll;
+        this.accessAll = accessAll;
     }
 
     public AccessAll getAccessAll() {
-        return m_accessAll;
+        return accessAll;
     }
 
     public String toString() {
-        return m_accessAll.toString();
+        return accessAll.toString();
     }
 
     public static ModuleComplianceAccess find(String keyword, boolean mandatory) {

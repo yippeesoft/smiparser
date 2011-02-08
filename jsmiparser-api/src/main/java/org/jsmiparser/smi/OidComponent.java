@@ -21,123 +21,134 @@ import org.jsmiparser.util.token.IntegerToken;
 import org.jsmiparser.util.token.Token;
 
 public class OidComponent {
+	private final OidComponent parent;
+	private OidComponent child;
+	private final IdToken idToken;
+	private final IntegerToken valueToken;
+	private SmiOidNode node;
+	private boolean isResolved = false;
 
-    private final OidComponent m_parent;
-    private OidComponent m_child;
-    private final IdToken m_idToken;
-    private final IntegerToken m_valueToken;
-    private SmiOidNode m_node;
-    private boolean m_isResolved = false;
+	public OidComponent(OidComponent parent, IdToken idToken,
+			IntegerToken intToken) {
+		this.parent = parent;
+		if (this.parent != null) {
+			this.parent.child = this;
+		}
+		this.idToken = idToken;
+		valueToken = intToken;
+	}
 
-    public OidComponent(OidComponent parent, IdToken idToken, IntegerToken intToken) {
-        m_parent = parent;
-        if (m_parent != null) {
-            m_parent.m_child = this;
-        }
-        m_idToken = idToken;
-        m_valueToken = intToken;
-    }
+	public IdToken getIdToken() {
+		return idToken;
+	}
 
-    public IdToken getIdToken() {
-        return m_idToken;
-    }
+	public IntegerToken getValueToken() {
+		return valueToken;
+	}
 
-    public IntegerToken getValueToken() {
-        return m_valueToken;
-    }
+	public SmiOidNode getNode() {
+		return node;
+	}
 
-    public SmiOidNode getNode() {
-        return m_node;
-    }
+	private Token getToken() {
+		if (idToken != null) {
+			return idToken;
+		}
+		return valueToken;
+	}
 
-    private Token getToken() {
-        if (m_idToken != null) {
-            return m_idToken;
-        }
-        return m_valueToken;
-    }
+	private boolean isFirst() {
+		return parent == null;
+	}
 
-    private boolean isFirst() {
-        return m_parent == null;
-    }
+	private boolean isLast() {
+		return child == null;
+	}
 
-    private boolean isLast() {
-        return m_child == null;
-    }
+	public SmiOidNode resolveNode(SmiModule module, XRefProblemReporter reporter) {
+		assert (node == null);
+		if (!isResolved) {
+			SmiOidNode parentNode = null;
+			if (parent != null) {
+				parentNode = parent.resolveNode(module, reporter);
+				if (parentNode == null) {
+					System.out.println("couldn't find parent for: "
+							+ parent.getToken());
+				}
+			}
+			node = doResolve(module, parentNode, reporter);
+			if (node == null) {
+				if (isLast()) {
+					if (parentNode != null) {
+						if (valueToken != null) {
+							node = new SmiOidNode(parentNode,
+									valueToken.getValue());
+						} else {
+							System.out
+									.println("valueToken missing for last subid: "
+											+ getToken());
+						}
+					} else {
+						System.out.println("parent missing for last subid: "
+								+ getToken());
+					}
+				} else {
+					System.out.println("couldn't resolve non-last subid "
+							+ getToken());
+				}
+			}
+			isResolved = true;
+		}
+		return node;
+	}
 
-    public SmiOidNode resolveNode(SmiModule module, XRefProblemReporter reporter) {
-        assert (m_node == null);
-        if (!m_isResolved) {
-            SmiOidNode parent = null;
-            if (m_parent != null) {
-                parent = m_parent.resolveNode(module, reporter);
-                if (parent == null) {
-                    System.out.println("couldn't find parent for: " + m_parent.getToken());
-                }
-            }
-            m_node = doResolve(module, parent, reporter);
-            if (m_node == null) {
-                if (isLast()) {
-                    if (parent != null) {
-                        if (m_valueToken != null) {
-                            m_node = new SmiOidNode(parent, m_valueToken.getValue());
-                        } else {
-                            System.out.println("valueToken missing for last subid: " + getToken());
-                        }
-                    } else {
-                        System.out.println("parent missing for last subid: " + getToken());
-                    }
-                } else {
-                    System.out.println("couldn't resolve non-last subid " + getToken());
-                }
-            }
-            m_isResolved = true;
-        }
-        return m_node;
-    }
-
-    private SmiOidNode doResolve(SmiModule module, SmiOidNode parent, XRefProblemReporter reporter) {
-        SmiOidNode node;
-        if (m_idToken != null && !isLast()) { // isLast check deals with jobmonMIB situation
-            SmiSymbol symbol = module.resolveReference(m_idToken, null);
-            if (symbol != null) {
-                if (symbol instanceof SmiOidValue) {
-                    SmiOidValue oidValue = (SmiOidValue) symbol;
-                    node = oidValue.resolveOid(reporter);
-                    if (node != null && m_valueToken != null) {
-                        // TODO compare
-                    }
-                } else {
-                    reporter.reportFoundSymbolButWrongType(m_idToken, SmiOidValue.class, symbol.getClass());
-                    node = null;
-                }
-            } else if (parent != null && m_valueToken != null) {
-                int value = m_valueToken.getValue();
-                node = parent.m_childMap.get(value);
-                if (node == null) {
-                    node = new SmiOidNode(parent, value);
-                }
-            } else {
-                node = null;
-            }
-        } else {
-            if (isFirst()) {
-                node = module.getMib().getRootNode().findChild(m_valueToken.getValue());
-                if (node == null) {
-                    node = new SmiOidNode(module.getMib().getRootNode(), m_valueToken.getValue());
-                    //throw new IllegalStateException(m_valueToken.toString());
-                }
-            } else if (parent != null) {
-                node = parent.findChild(m_valueToken.getValue());
-                if (node == null) {
-                    node = new SmiOidNode(parent, m_valueToken.getValue());
-                }
-            } else {
-                //throw new IllegalStateException(m_valueToken.toString());
-                return null;
-            }
-        }
-        return node;
-    }
+	private SmiOidNode doResolve(SmiModule module, SmiOidNode parent,
+			XRefProblemReporter reporter) {
+		SmiOidNode node;
+		if (idToken != null && !isLast()) { // isLast check deals with
+											// jobmonMIB situation
+			SmiSymbol symbol = module.resolveReference(idToken, null);
+			if (symbol != null) {
+				if (symbol instanceof SmiOidValue) {
+					SmiOidValue oidValue = (SmiOidValue) symbol;
+					node = oidValue.resolveOid(reporter);
+					if (node != null && valueToken != null) {
+						// TODO compare
+					}
+				} else {
+					reporter.reportFoundSymbolButWrongType(idToken,
+							SmiOidValue.class, symbol.getClass());
+					node = null;
+				}
+			} else if (parent != null && valueToken != null) {
+				int value = valueToken.getValue();
+				node = parent.childMap.get(value);
+				if (node == null) {
+					node = new SmiOidNode(parent, value);
+				}
+			} else {
+				node = null;
+			}
+		} else {
+			if (isFirst()) {
+				node = module.getMib().getRootNode()
+						.findChild(valueToken.getValue());
+				if (node == null) {
+					node = new SmiOidNode(module.getMib().getRootNode(),
+							valueToken.getValue());
+					// throw new IllegalStateException(m_valueToken.toString());
+				}
+			} else if (parent != null) {
+				node = parent.findChild(valueToken.getValue());
+				if (node == null) {
+					node = new SmiOidNode(parent, valueToken.getValue());
+				}
+			} else {
+				// throw new IllegalStateException(m_valueToken.toString());
+				return null;
+			}
+		}
+		return node;
+	}
 
 }

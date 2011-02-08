@@ -22,31 +22,33 @@ import org.jsmiparser.phase.xref.XRefProblemReporter;
 import java.util.List;
 
 /**
- * Besides the OBJECT-TYPE fields that are specific to SNMP variable definitions,
- * this class also contains some methods that make it easier to deal with the recursive nature
- * of the SmiType definitions.
+ * Besides the OBJECT-TYPE fields that are specific to SNMP variable
+ * definitions, this class also contains some methods that make it easier to
+ * deal with the recursive nature of the SmiType definitions.
  */
 public class SmiVariable extends SmiObjectType {
+	private final QuotedStringToken unitsToken;
+	private final SmiDefaultValue defaultValue;
 
-    private final QuotedStringToken m_unitsToken;
-    private final SmiDefaultValue m_defaultValue;
-
-    public SmiVariable(IdToken idToken, SmiModule module, SmiType type, QuotedStringToken unitsToken, SmiDefaultValue defaultValue) {
+	public SmiVariable(IdToken idToken, SmiModule module, SmiType type,
+			QuotedStringToken unitsToken, SmiDefaultValue defaultValue) {
 		super(idToken, module);
-        setType(type);
-        m_unitsToken = unitsToken;
-        m_defaultValue = defaultValue;
-        if (m_defaultValue != null) {
-            m_defaultValue.m_variable = this;
-        }
-    }
-
-    public String getCodeConstantId() {
-		return getModule().getMib().getCodeNamingStrategy().getCodeConstantId(this);
+		setType(type);
+		this.unitsToken = unitsToken;
+		this.defaultValue = defaultValue;
+		if (this.defaultValue != null) {
+			this.defaultValue.variable = this;
+		}
 	}
-	
+
+	public String getCodeConstantId() {
+		return getModule().getMib().getCodeNamingStrategy()
+				.getCodeConstantId(this);
+	}
+
 	public String getFullCodeConstantId() {
-		return getModule().getMib().getCodeNamingStrategy().getFullCodeConstantId(this);
+		return getModule().getMib().getCodeNamingStrategy()
+				.getFullCodeConstantId(this);
 	}
 
 	public String getCodeOid() {
@@ -57,132 +59,138 @@ public class SmiVariable extends SmiObjectType {
 		return getModule().getMib().getCodeNamingStrategy().getVariableId(this);
 	}
 
-    public String getRequestMethodId() {
-		return getModule().getMib().getCodeNamingStrategy().getRequestMethodId(this);
+	public String getRequestMethodId() {
+		return getModule().getMib().getCodeNamingStrategy()
+				.getRequestMethodId(this);
 	}
 
 	public String getGetterMethodId() {
-		return getModule().getMib().getCodeNamingStrategy().getGetterMethodId(this);
+		return getModule().getMib().getCodeNamingStrategy()
+				.getGetterMethodId(this);
 	}
 
 	public String getSetterMethodId() {
-		return getModule().getMib().getCodeNamingStrategy().getSetterMethodId(this);
+		return getModule().getMib().getCodeNamingStrategy()
+				.getSetterMethodId(this);
 	}
 
-    public SmiRow getRow() {
-        if (getNode() != null && getNode().getParent() != null) {
-            SmiOidValue oidValue = getNode().getParent().getSingleValue(SmiOidValue.class, getModule());
-            if (oidValue instanceof SmiRow) {
-                return (SmiRow) oidValue;
-            }
-        }
-        return null;
-    }
+	public SmiRow getRow() {
+		if (getNode() != null && getNode().getParent() != null) {
+			SmiOidValue oidValue = getNode().getParent().getSingleValue(
+					SmiOidValue.class, getModule());
+			if (oidValue instanceof SmiRow) {
+				return (SmiRow) oidValue;
+			}
+		}
+		return null;
+	}
 
-    public SmiTable getTable() {
-        SmiRow row = getRow();
-        if (row != null) {
-            return row.getTable();
-        }
-        return null;
-    }
+	public SmiTable getTable() {
+		SmiRow row = getRow();
+		if (row != null) {
+			return row.getTable();
+		}
+		return null;
+	}
 
-    public boolean isColumn() {
-        return getRow() != null;
-    }
+	public boolean isColumn() {
+		return getRow() != null;
+	}
 
-    public boolean isScalar() {
-        return getRow() == null;
-    }
+	public boolean isScalar() {
+		return getRow() == null;
+	}
 
-    public String getUnits() {
-        return m_unitsToken != null ? m_unitsToken.getValue() : null;
-    }
+	public String getUnits() {
+		return unitsToken != null ? unitsToken.getValue() : null;
+	}
 
-    public QuotedStringToken getUnitsToken() {
-        return m_unitsToken;
-    }
+	public QuotedStringToken getUnitsToken() {
+		return unitsToken;
+	}
 
-    public SmiTextualConvention getTextualConvention() {
-        SmiType type = m_type;
-        while (type != null) {
-            if (type instanceof SmiTextualConvention) {
-                return (SmiTextualConvention) type;
-            }
-            type = type.getBaseType();
-        }
-        return null;
-    }
+	public SmiTextualConvention getTextualConvention() {
+		SmiType smiType = type;
+		while (smiType != null) {
+			if (smiType instanceof SmiTextualConvention) {
+				return (SmiTextualConvention) smiType;
+			}
+			smiType = smiType.getBaseType();
+		}
+		return null;
+	}
 
-    public SmiPrimitiveType getPrimitiveType() {
-        return m_type.getPrimitiveType();
-    }
+	public SmiPrimitiveType getPrimitiveType() {
+		return type.getPrimitiveType();
+	}
 
-    public List<SmiNamedNumber> getEnumValues() {
-        SmiType type = m_type;
-        while (type != null) {
-            if (type.getEnumValues() != null) {
-                return type.getEnumValues();
-            }
-            type = type.getBaseType();
-        }
-        return null;
-    }
+	public List<SmiNamedNumber> getEnumValues() {
+		SmiType smiType = type;
+		while (smiType != null) {
+			if (smiType.getEnumValues() != null) {
+				return smiType.getEnumValues();
+			}
+			smiType = smiType.getBaseType();
+		}
+		return null;
+	}
 
-    public List<SmiNamedNumber> getBitFields() {
-        SmiType type = m_type;
-        while (type != null) {
-            if (type.getBitFields() != null) {
-                return type.getBitFields();
-            }
-            type = type.getBaseType();
-        }
-        return null;
-    }
+	public List<SmiNamedNumber> getBitFields() {
+		SmiType smiType = type;
+		while (smiType != null) {
+			if (smiType.getBitFields() != null) {
+				return smiType.getBitFields();
+			}
+			smiType = smiType.getBaseType();
+		}
+		return null;
+	}
 
-    public List<SmiRange> getRangeConstraints() {
-        SmiType type = m_type;
-        while (type != null) {
-            if (type.getRangeConstraints() != null) {
-                return type.getRangeConstraints();
-            }
-            type = type.getBaseType();
-        }
-        return null;
-    }
+	public List<SmiRange> getRangeConstraints() {
+		SmiType smiType = type;
+		while (smiType != null) {
+			if (smiType.getRangeConstraints() != null) {
+				return smiType.getRangeConstraints();
+			}
+			smiType = smiType.getBaseType();
+		}
+		return null;
+	}
 
-    public List<SmiRange> getSizeConstraints() {
-        SmiType type = m_type;
-        while (type != null) {
-            if (type.getSizeConstraints() != null) {
-                return type.getSizeConstraints();
-            }
-            type = type.getBaseType();
-        }
-        return null;
-    }
+	public List<SmiRange> getSizeConstraints() {
+		SmiType smiType = type;
+		while (smiType != null) {
+			if (smiType.getSizeConstraints() != null) {
+				return smiType.getSizeConstraints();
+			}
+			smiType = smiType.getBaseType();
+		}
+		return null;
+	}
 
-    public SmiDefaultValue getDefaultValue() {
-        return m_defaultValue;
-    }
+	public SmiDefaultValue getDefaultValue() {
+		return defaultValue;
+	}
 
-    public SmiNamedNumber resolveBitField(IdToken idToken, XRefProblemReporter reporter) {
-        for (SmiNamedNumber nn : getBitFields()) {
-            if (nn.getId().equals(idToken.getId())) {
-                return nn;
-            }
-        }
-        reporter.reportCannotFindBitField(idToken);
-        return null;
-    }
+	public SmiNamedNumber resolveBitField(IdToken idToken,
+			XRefProblemReporter reporter) {
+		for (SmiNamedNumber nn : getBitFields()) {
+			if (nn.getId().equals(idToken.getId())) {
+				return nn;
+			}
+		}
+		reporter.reportCannotFindBitField(idToken);
+		return null;
+	}
 
-    public SmiNamedNumber resolveEnumConstant(IdToken idToken, XRefProblemReporter reporter) {
-        for (SmiNamedNumber nn : getEnumValues()) {
-            if (nn.getId().equals(idToken.getId())) {
-                return nn;
-            }
-        }
-        reporter.reportCannotFindEnumConstant(idToken);
-        return null;
-    }
+	public SmiNamedNumber resolveEnumConstant(IdToken idToken,
+			XRefProblemReporter reporter) {
+		for (SmiNamedNumber nn : getEnumValues()) {
+			if (nn.getId().equals(idToken.getId())) {
+				return nn;
+			}
+		}
+		reporter.reportCannotFindEnumConstant(idToken);
+		return null;
+	}
 }

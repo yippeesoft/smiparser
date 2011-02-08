@@ -15,55 +15,45 @@
  */
 package org.jsmiparser.smi;
 
-
 // TODO add an interface with isWritable, isReadable etc methods, implemented by all three AccessX classes
 public enum AccessAll implements AccessPermissions {
-    READ_ONLY,
-    READ_WRITE,
-    WRITE_ONLY,
-    NOT_ACCESSIBLE,
-    ACCESSIBLE_FOR_NOTIFY,
-    READ_CREATE,
-    NOT_IMPLEMENTED;
+	READ_ONLY, READ_WRITE, WRITE_ONLY, NOT_ACCESSIBLE, ACCESSIBLE_FOR_NOTIFY, READ_CREATE, NOT_IMPLEMENTED;
 
-    private String m_keyword;
+	private String keyword;
 
-    private AccessAll() {
-        m_keyword = name().toLowerCase().replace('_', '-');
-    }
+	private AccessAll() {
+		keyword = name().toLowerCase().replace('_', '-');
+	}
 
-    public String toString() {
-        return m_keyword;
-    }
+	public String toString() {
+		return keyword;
+	}
 
-    public static AccessAll find(String keyword, boolean mandatory) {
-        return Util.find(AccessAll.class, keyword, mandatory);
-    }
+	public static AccessAll find(String keyword, boolean mandatory) {
+		return Util.find(AccessAll.class, keyword, mandatory);
+	}
 
-    public boolean isCreateWritable() {        
-        return isWritable() || this == READ_CREATE;
-    }
+	public boolean isCreateWritable() {
+		return isWritable() || this == READ_CREATE;
+	}
 
-    public boolean isReadable() {
-        return this == READ_ONLY || this == READ_WRITE || this == READ_CREATE;
-    }
+	public boolean isReadable() {
+		return this == READ_ONLY || this == READ_WRITE || this == READ_CREATE;
+	}
 
-    public boolean isWritable() {
-        return this == READ_WRITE || this == WRITE_ONLY;
-    }
+	public boolean isWritable() {
+		return this == READ_WRITE || this == WRITE_ONLY;
+	}
 
-/*
-    public AccessAll find(String keyword, MacroType macroType) {
-        AccessAll result = Util.find(AccessAll.class, keyword);
-        if (result.isSupportedBy(macroType)) {
-            return result;
-        }
-        throw new IllegalArgumentException("Access " + result + " is not supported by macro " + macroType);
-    }
-
-    public boolean isSupportedBy(MacroType macroType) {
-        return m_supportedMacroTypes.contains(macroType);
-    }
-*/
+	/*
+	 * public AccessAll find(String keyword, MacroType macroType) { AccessAll
+	 * result = Util.find(AccessAll.class, keyword); if
+	 * (result.isSupportedBy(macroType)) { return result; } throw new
+	 * IllegalArgumentException("Access " + result +
+	 * " is not supported by macro " + macroType); }
+	 * 
+	 * public boolean isSupportedBy(MacroType macroType) { return
+	 * m_supportedMacroTypes.contains(macroType); }
+	 */
 
 }

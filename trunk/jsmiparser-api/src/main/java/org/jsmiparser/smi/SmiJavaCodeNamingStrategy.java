@@ -15,12 +15,9 @@
  */
 package org.jsmiparser.smi;
 
-
-
 public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
-
 	public static final String ATTR_OIDS = "AttrOids";
-	
+
 	private String packagePrefix_;
 
 	public SmiJavaCodeNamingStrategy(String packagePrefix) {
@@ -46,11 +43,14 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 	}
 
 	public String getFullCodeConstantId(SmiVariable variable) {
-		return variable.getModule().getFullVariableOidClassId() + "." + variable.getCodeConstantId();
+		return variable.getModule().getFullVariableOidClassId() + "."
+				+ variable.getCodeConstantId();
 	}
-	
-	private enum Category { UPPER, LOWER, DIGIT, OTHER }
-	
+
+	private enum Category {
+		UPPER, LOWER, DIGIT, OTHER
+	}
+
 	public String makeConstant(String str) {
 		StringBuilder result = new StringBuilder();
 		int i = 0;
@@ -67,16 +67,16 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 			prev = processPrevious(result, prev, cat, current);
 		}
 		prev = append(result, prev, null);
-		
+
 		return result.toString();
 	}
 
-	private String processPrevious(StringBuilder result, String prev, final Category cat, String current) {
+	private String processPrevious(StringBuilder result, String prev,
+			final Category cat, String current) {
 		String newPrev = null;
 		if (prev == null) {
 			newPrev = current;
-		}
-		else {
+		} else {
 			switch (getCategory(prev.charAt(0))) {
 			case DIGIT:
 				newPrev = append(result, prev, current);
@@ -85,14 +85,12 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 				if (cat == Category.LOWER) {
 					if (prev.length() == 1) {
 						newPrev = prev + current;
-					}
-					else {
-						current = prev.charAt(prev.length()-1) + current;
-						prev = prev.substring(0, prev.length()-1);
+					} else {
+						current = prev.charAt(prev.length() - 1) + current;
+						prev = prev.substring(0, prev.length() - 1);
 						newPrev = append(result, prev, current);
 					}
-				}
-				else {
+				} else {
 					newPrev = append(result, prev, current);
 				}
 				break;
@@ -115,18 +113,15 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 		result.append(prev.toUpperCase());
 		return current;
 	}
-	
+
 	private Category getCategory(char ch) {
 		if (Character.isUpperCase(ch)) {
 			return Category.UPPER;
-		}
-		else if (Character.isLowerCase(ch)) {
+		} else if (Character.isLowerCase(ch)) {
 			return Category.LOWER;
-		}
-		else if (Character.isDigit(ch)) {
+		} else if (Character.isDigit(ch)) {
 			return Category.DIGIT;
-		}
-		else {
+		} else {
 			return Category.OTHER;
 		}
 	}
@@ -150,7 +145,7 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 	public String getRequestMethodId(SmiVariable attr) {
 		return "req" + SmiUtil.ucFirst(attr.getCodeId());
 	}
-	
+
 	public String getGetterMethodId(SmiVariable attr) {
 		return "get" + SmiUtil.ucFirst(attr.getCodeId());
 	}

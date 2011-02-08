@@ -15,20 +15,6 @@
  */
 package org.jsmiparser.smi;
 
-
-/**
- * This identifies each of the primitive types as defined in the SNMPv2-SMI module.
- * Each one of them is also mapped to the field that should be used to send/receive
- * values of this type.
- *
- * There is no distinction made here between types such as Counter and Counter32.
- * That distinction can be made by comparing the SmiType definitions: they will have
- * the same SmiPrimitiveType, but they are different SmiTypes (they are also defined
- * in different modules, so that makes sense too).
- * 
- * @author davy
- *
- */
 public enum SmiPrimitiveType {
 
 	// Basic ASN.1 type:
@@ -56,12 +42,12 @@ public enum SmiPrimitiveType {
 	;
 	
 	//private static Map<String, SmiPrimitiveType> xmlValueMap_;
-	private SmiVarBindField m_varBindField;
-	private String m_xmlValue;
+	private SmiVarBindField varBindField;
+	private String xmlValue;
 
     // TODO use these for errors reporting
-    private boolean m_namedNumbersSupported;
-    private boolean m_rangesSupported;
+    private boolean namedNumbersSupported;
+    private boolean rangesSupported;
 
 
     private SmiPrimitiveType(SmiVarBindField varBindField, String xmlValue, boolean allowsNamedNumbers, boolean allowsRanges)
@@ -69,22 +55,22 @@ public enum SmiPrimitiveType {
 //		if (xmlValueMap_ == null) {
 //			xmlValueMap_ = new HashMap<String, SmiPrimitiveType>();
 //		}
-		m_varBindField = varBindField;
-		m_xmlValue = xmlValue;
+		this.varBindField = varBindField;
+		this.xmlValue = xmlValue;
 		//xmlValueMap_.put(xmlValue_, this);
 
-        m_namedNumbersSupported = allowsNamedNumbers;
-        m_rangesSupported = allowsRanges;
+        namedNumbersSupported = allowsNamedNumbers;
+        rangesSupported = allowsRanges;
     }
 	
 	public SmiVarBindField getVarBindField() {
-		return m_varBindField;
+		return varBindField;
 	}
 	
 	public SmiPrimitiveType fromXmlValue(String xmlValue)
 	{
 		for (SmiPrimitiveType pt : values()) {
-			if (pt.m_xmlValue.equals(xmlValue)) {
+			if (pt.xmlValue.equals(xmlValue)) {
 				return pt;
 			}
 		}
@@ -93,14 +79,14 @@ public enum SmiPrimitiveType {
 
 
     public String getXmlValue() {
-        return m_xmlValue;
+        return xmlValue;
     }
 
     public boolean isNamedNumbersSupported() {
-        return m_namedNumbersSupported;
+        return namedNumbersSupported;
     }
 
     public boolean isRangesSupported() {
-        return m_rangesSupported;
+        return rangesSupported;
     }
 }

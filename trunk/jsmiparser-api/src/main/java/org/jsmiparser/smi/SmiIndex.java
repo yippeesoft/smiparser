@@ -18,39 +18,38 @@ package org.jsmiparser.smi;
 import org.jsmiparser.phase.xref.XRefProblemReporter;
 
 /**
- * Indexes belong to a row and refer to a column.
- * Note that it is possible that the column belongs to another table!
+ * Indexes belong to a row and refer to a column. Note that it is possible that
+ * the column belongs to another table!
  */
 public class SmiIndex {
+	private final ScopedId scopedId;
+	private final SmiRow row;
+	private final boolean implied;
 
-    private final ScopedId m_scopedId;
-    private final SmiRow m_row;
-    private final boolean m_implied;
-	
 	public SmiIndex(SmiRow row, ScopedId scopedId, boolean implied) {
-        m_row = row;
-        m_scopedId = scopedId;
-        m_implied = implied;
+		this.row = row;
+		this.scopedId = scopedId;
+		this.implied = implied;
 	}
 
 	public boolean isImplied() {
-		return m_implied;
+		return implied;
 	}
 
 	public SmiVariable getColumn() {
-		return (SmiVariable) m_scopedId.getSymbol();
+		return (SmiVariable) scopedId.getSymbol();
 	}
 
 	public SmiRow getRow() {
-		return m_row;
+		return row;
 	}
 
-    public boolean isColumnFromOtherTable() {
-        return m_row.getTable() != getColumn().getTable();
-    }
+	public boolean isColumnFromOtherTable() {
+		return row.getTable() != getColumn().getTable();
+	}
 
-    public void resolveReferences(XRefProblemReporter reporter) {
-        m_scopedId.resolveReferences(reporter);
-    }
+	public void resolveReferences(XRefProblemReporter reporter) {
+		scopedId.resolveReferences(reporter);
+	}
 
 }

@@ -23,7 +23,7 @@ import org.junit.Test;
 public class TextUtilTest {
 	@Before
 	public void testKeyWordMap() {
-		assertEquals(53, TextUtil.keyWordMap_.size());
+		assertEquals(53, TextUtil.keywords.size());
 	}
 
 	@Test
@@ -39,5 +39,25 @@ public class TextUtilTest {
 		assertEquals("bb", TextUtil.makeCodeId("bb", false));
 		assertEquals("_", TextUtil.makeCodeId("", true));
 		assertEquals("_", TextUtil.makeCodeId(null, true));
+
+		assertEquals("_", TextUtil.makeCodeId("#", true));
+		assertEquals("Test_", TextUtil.makeCodeId("test#", true));
+
+		assertEquals("cc", TextUtil.makeCodeId("cc"));
+	}
+
+	@Test
+	public void makeTypeName() {
+		assertEquals("Book", TextUtil.makeTypeName("book"));
+		assertEquals("book", TextUtil.lcFirst("book"));
+		assertEquals("book", TextUtil.lcFirst("Book"));
+		
+		assertEquals("Book", TextUtil.ucFirst("book"));
+	}
+
+	@Test
+	public void testPath() {
+		assertEquals("/org/jsmiparser/util",
+				TextUtil.getPath(this.getClass().getPackage()));
 	}
 }

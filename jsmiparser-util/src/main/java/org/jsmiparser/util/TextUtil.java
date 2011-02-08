@@ -16,6 +16,7 @@
 package org.jsmiparser.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +24,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class TextUtil {
-	private static final Logger m_log = Logger.getLogger(TextUtil.class);
-
-	static Map<String, String> keyWordMap_ = makeKeyWordMap();
+	private static final Logger LOG = Logger.getLogger(TextUtil.class);
+	private static final String JAVA_KEYWORDS_PATH = "/org/jsmiparser/util/JavaKeywords.txt";
+	static final String KEYWORD_PREFIX = "_";
+	static Map<String, String> keywords = makeKeyWordMap();
 
 	static public String makeCodeId(String id) {
 		return makeCodeId(id, false);
@@ -58,7 +60,7 @@ public class TextUtil {
 				id = "_" + id;
 			}
 		}
-		Object o = keyWordMap_.get(id);
+		Object o = keywords.get(id);
 		if (o != null) {
 			id = (String) o;
 		}
@@ -69,28 +71,31 @@ public class TextUtil {
 		return ucFirst(makeCodeId(str, true));
 	}
 
-	final static String KEYWORD_PREFIX = "_";
-
 	private static void addKeyWord(Map<String, String> m, String kw) {
 		m.put(kw, KEYWORD_PREFIX + kw);
 	}
 
 	private static Map<String, String> makeKeyWordMap() {
+		BufferedReader reader = null;
 		try {
 			Map<String, String> m = new HashMap<String, String>();
-			String resourceName = "/org/jsmiparser/util/JavaKeywords.txt";
-			BufferedReader r = new BufferedReader(new InputStreamReader(
-					TextUtil.class.getResourceAsStream(resourceName)));
-			String keyword = r.readLine();
+			reader = new BufferedReader(new InputStreamReader(
+					TextUtil.class.getResourceAsStream(JAVA_KEYWORDS_PATH)));
+			String keyword = reader.readLine();
 			while (keyword != null) {
 				addKeyWord(m, keyword);
-				keyword = r.readLine();
+				keyword = reader.readLine();
 			}
-			r.close();
 			return m;
 		} catch (Throwable e) {
-			m_log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				LOG.error(e.getMessage(), e);
+			}
 		}
 	}
 
@@ -115,8 +120,8 @@ public class TextUtil {
 	}
 
 	public static String getPath(Package pkg) {
-		m_log.debug("package: " + pkg);
-		m_log.debug("getPath() for: " + pkg.getName());
+		LOG.debug("package: " + pkg);
+		LOG.debug("getPath() for: " + pkg.getName());
 		return "/" + pkg.getName().replace('.', '/');
 	}
 

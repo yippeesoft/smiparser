@@ -30,6 +30,7 @@ public class BinaryStringTokenTest {
 				"'101'B");
 		BigInteger value = t.getIntegerValue();
 		assertEquals(5, value.intValue());
+		assertEquals('B', t.getRadixChar());
 	}
 
 	@Test

@@ -21,35 +21,35 @@ import org.jsmiparser.util.location.Location;
 import org.jsmiparser.util.problem.annotations.ProblemSeverity;
 
 public class ProblemEvent {
-	private Location m_location;
-	private ProblemSeverity m_severity;
-	private String m_messageKey;
-	private String m_defaultMessage;
-	private Object[] m_arguments;
+	private Location location;
+	private ProblemSeverity severity;
+	private String messageKey;
+	private String defaultMessage;
+	private Object[] arguments;
 
 	public ProblemEvent(Location location, ProblemSeverity severity,
 			String messageKey, String defaultMessage, Object[] arguments) {
-		m_location = location;
-		m_severity = severity;
-		m_messageKey = messageKey;
-		m_defaultMessage = defaultMessage;
-		m_arguments = arguments;
+		this.location = location;
+		this.severity = severity;
+		this.messageKey = messageKey;
+		this.defaultMessage = defaultMessage;
+		this.arguments = arguments;
 	}
 
 	public Location getLocation() {
-		return m_location;
+		return location;
 	}
 
 	public ProblemSeverity getSeverity() {
-		return m_severity;
+		return severity;
 	}
 
 	public String getMessageKey() {
-		return m_messageKey;
+		return messageKey;
 	}
 
 	public Object[] getArguments() {
-		return m_arguments;
+		return arguments;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class ProblemEvent {
 	 */
 	public String getLocalizedMessage() {
 		Formatter f = new Formatter();
-		f.format(m_defaultMessage, m_arguments);
+		f.format(defaultMessage, arguments);
 		return f.toString();
 	}
 }

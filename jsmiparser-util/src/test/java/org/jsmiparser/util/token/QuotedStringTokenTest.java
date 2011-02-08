@@ -27,6 +27,8 @@ public class QuotedStringTokenTest {
 		QuotedStringToken token = new QuotedStringToken(new Location("file"),
 				"\"bla\"", '\"');
 		assertEquals("bla", token.getValue());
+		assertEquals('"', token.getQuoteChar());
+		assertEquals("\"bla\"", token.toString());
 	}
 
 	@Test

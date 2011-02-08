@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClassPathURLListFactory extends AbstractURLListFactory {
-	protected ClassLoader m_classLoader;
+	protected ClassLoader classLoader;
 
 	public ClassPathURLListFactory() {
 		super();
@@ -35,19 +35,19 @@ public class ClassPathURLListFactory extends AbstractURLListFactory {
 	}
 
 	public ClassLoader getClassLoader() {
-		if (m_classLoader != null) {
-			return m_classLoader;
+		if (classLoader != null) {
+			return classLoader;
 		}
 		return Thread.currentThread().getContextClassLoader();
 	}
 
 	public void setClassLoader(ClassLoader classLoader) {
-		m_classLoader = classLoader;
+		this.classLoader = classLoader;
 	}
 
 	public List<URL> create() {
 		List<URL> result = new ArrayList<URL>();
-		for (String child : m_children) {
+		for (String child : children) {
 			String path = getRootPath() + child; // explicitly no
 			URL url = getClassLoader().getResource(path);
 			if (url == null) {

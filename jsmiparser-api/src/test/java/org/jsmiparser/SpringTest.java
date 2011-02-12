@@ -16,7 +16,9 @@
 package org.jsmiparser;
 
 import org.jsmiparser.smi.SmiMib;
+import org.junit.Test;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import org.springframework.util.StopWatch;
 
 public class SpringTest extends AbstractDependencyInjectionSpringContextTests {
 
@@ -35,10 +37,25 @@ public class SpringTest extends AbstractDependencyInjectionSpringContextTests {
 		m_mib = mib;
 	}
 
+	@Test
 	public void test() {
 		// assertEquals(44, getMib().getScalars().size());
 		// assertEquals(57, getMib().getColumns().size());
 		System.err.println(getMib().getScalars().size());
 		System.err.println(getMib().getColumns().size());
+
+	}
+
+	@Test
+	public void testPperformance() {
+		int times = 10000000;
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start("query for " + times + " times");
+
+		for (int i = 0; i < times; i++) {
+			getMib().getOidValues().find("snmpOutPkts");
+		}
+		stopWatch.stop();
+		System.out.println(stopWatch.prettyPrint());
 	}
 }

@@ -3,10 +3,11 @@
   <groupId>org.jsmiparser</groupId>
   <artifactId>smiparser</artifactId>
   <versioning>
-    <release>0.6.11</release>
+    <release>0.6.12</release>
     <versions>
       <version>0.6.11</version>
+      <version>0.6.12</version>
     </versions>
-    <lastUpdated>20110401080831</lastUpdated>
+    <lastUpdated>20110401081856</lastUpdated>
   </versioning>
 </metadata>

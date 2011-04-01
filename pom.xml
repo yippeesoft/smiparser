@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jsmiparser</groupId>
-  <artifactId>base</artifactId>
+  <artifactId>jsmiparser</artifactId>
   <packaging>pom</packaging>
-  <version>0.6.9-SNAPSHOT</version>
+  <version>0.6.10-SNAPSHOT</version>
   <name>Java SMI Parser base</name>
   <url>http://www.jsmiparser.org</url>
   <inceptionYear>2011</inceptionYear>
@@ -140,9 +140,9 @@
       </plugin>
       <plugin>
         <inherited>false</inherited>
-        <groupId>com.mycila.maven-license-plugin</groupId>
+        <groupId>com.google.code.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
-        <version>1.9.0</version>
+        <version>1.4.0</version>
         <configuration>
           <header>${basedir}/header.txt</header>
           <failIfMissing>true</failIfMissing>

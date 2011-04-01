@@ -39,7 +39,7 @@
 		<spring-beans.version>3.0.5.RELEASE</spring-beans.version>
 		<spring-test.version>3.0.5.RELEASE</spring-test.version>
 		<antlr.version>2.7.6</antlr.version>
-		<maven-license-plugin.version>1.9.0</maven-license-plugin.version>
+		<maven-license-plugin.version>1.4.0</maven-license-plugin.version>
 		<maven-antlr-plugin.version>2.0-beta-1</maven-antlr-plugin.version>
 		<easymock.version>3.0</easymock.version>
 	</properties>
@@ -91,7 +91,7 @@
 				<version>${spring-test.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.mycila.maven-license-plugin</groupId>
+				<groupId>com.google.code.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
 				<version>${maven-license-plugin.version}</version>
 			</dependency>

@@ -226,7 +226,7 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
+          <!--<plugin>
             <artifactId>maven-javadoc-plugin</artifactId>
             <executions>
               <execution>
@@ -236,7 +236,7 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
+          </plugin>-->
           <plugin>
             <artifactId>maven-source-plugin</artifactId>
             <executions>

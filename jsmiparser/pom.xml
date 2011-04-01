@@ -6,7 +6,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jsmiparser</groupId>
-	<artifactId>jsmiparser-impl</artifactId>
+	<artifactId>smiparser</artifactId>
 	<packaging>jar</packaging>
 	<version>0.6.11-SNAPSHOT</version>
 	<name>Java SMI Parser</name>

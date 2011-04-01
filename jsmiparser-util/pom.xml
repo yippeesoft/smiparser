@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>org.jsmiparser</groupId>
-		<artifactId>jsmiparser</artifactId>
+		<artifactId>base</artifactId>
 		<version>0.6.9-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -15,7 +15,7 @@
 		<plugins>
 			<plugin>
 				<inherited>false</inherited>
-				<groupId>com.mycila.maven-license-plugin</groupId>
+				<groupId>com.google.code.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
 				<configuration>
 					<header>${basedir}/../header.txt</header>

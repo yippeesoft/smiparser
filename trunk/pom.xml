@@ -4,7 +4,7 @@
   <groupId>org.jsmiparser</groupId>
   <artifactId>jsmiparser</artifactId>
   <packaging>pom</packaging>
-  <version>0.6.10-SNAPSHOT</version>
+  <version>0.6.11-SNAPSHOT</version>
   <name>Java SMI Parser base</name>
   <url>http://www.jsmiparser.org</url>
   <inceptionYear>2011</inceptionYear>
@@ -18,9 +18,9 @@
     <module>jsmiparser</module>
   </modules>
   <scm>
-    <connection>scm:svn:http://smiparser.googlecode.com/svn/tags/base-0.6.9</connection>
-    <developerConnection>scm:svn:https://smiparser.googlecode.com/svn/tags/base-0.6.9</developerConnection>
-    <url>http://smiparser.googlecode.com/svn/tags/base-0.6.9</url>
+    <connection>scm:svn:http://smiparser.googlecode.com/svn/tags/jsmiparser-0.6.10</connection>
+    <developerConnection>scm:svn:https://smiparser.googlecode.com/svn/tags/jsmiparser-0.6.10</developerConnection>
+    <url>http://smiparser.googlecode.com/svn/tags/jsmiparser-0.6.10</url>
   </scm>
   <issueManagement>
     <url>http://code.google.com/p/smiparser/issues/list</url>
@@ -133,9 +133,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+		<version>2.3.3</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
       </plugin>
       <plugin>

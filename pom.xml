@@ -16,7 +16,6 @@
 		</license>
 	</licenses>
 	<modules>
-		<module>jsmiparser-util</module>
 		<module>jsmiparser-api</module>
 	</modules>
 	<scm>

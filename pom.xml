@@ -4,7 +4,7 @@
   <groupId>org.jsmiparser</groupId>
   <artifactId>base</artifactId>
   <packaging>pom</packaging>
-  <version>0.6.13-SNAPSHOT</version>
+  <version>0.6.13</version>
   <name>Java SMI Parser base</name>
   <url>http://www.jsmiparser.org</url>
   <inceptionYear>2011</inceptionYear>
@@ -18,9 +18,9 @@
     <module>smiparser</module>
   </modules>
   <scm>
-    <connection>scm:svn:http://smiparser.googlecode.com/svn/tags/base-0.6.12</connection>
-    <developerConnection>scm:svn:https://smiparser.googlecode.com/svn/tags/base-0.6.12</developerConnection>
-    <url>http://smiparser.googlecode.com/svn/tags/base-0.6.12</url>
+    <connection>scm:svn:http://smiparser.googlecode.com/svn/tags/base-0.6.13</connection>
+    <developerConnection>scm:svn:https://smiparser.googlecode.com/svn/tags/base-0.6.13</developerConnection>
+    <url>http://smiparser.googlecode.com/svn/tags/base-0.6.13</url>
   </scm>
   <issueManagement>
     <url>http://code.google.com/p/smiparser/issues/list</url>

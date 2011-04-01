@@ -4,7 +4,7 @@
   <groupId>org.jsmiparser</groupId>
   <artifactId>base</artifactId>
   <packaging>pom</packaging>
-  <version>0.6.12</version>
+  <version>0.6.13-SNAPSHOT</version>
   <name>Java SMI Parser base</name>
   <url>http://www.jsmiparser.org</url>
   <inceptionYear>2011</inceptionYear>
